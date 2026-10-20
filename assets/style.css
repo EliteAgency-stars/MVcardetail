@@ -1,5 +1,5 @@
-@font-face { font-family: 'Cabinet Grotesk'; src: url('/fonts/cabinet-grotesk-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
-@font-face { font-family: 'Cabinet Grotesk'; src: url('/fonts/cabinet-grotesk-800.woff2') format('woff2'); font-weight: 800 900; font-display: swap; }
+@font-face { font-family: 'General Sans'; src: url('/fonts/general-sans-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'General Sans'; src: url('/fonts/general-sans-600.woff2') format('woff2'); font-weight: 600 900; font-display: swap; }
 @font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
 @font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-700.woff2') format('woff2'); font-weight: 600 700; font-display: swap; }
@@ -17,7 +17,7 @@
   --ok: #16c172;
   --danger: #ff5a5f;
   --radius: 18px;
-  --display: 'Cabinet Grotesk', system-ui, sans-serif;
+  --display: 'General Sans', system-ui, sans-serif;
   --body: 'Satoshi', system-ui, sans-serif;
   color-scheme: dark;
 }
@@ -30,7 +30,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
-.display { font-family: var(--display); font-weight: 800; letter-spacing: -.02em; line-height: .98; }
+.display { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: -.01em; line-height: 1; }
 .eyebrow { font: 600 12px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
 .muted { color: var(--muted); }
 
@@ -75,3 +75,12 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1); }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Shine: a glint of light travels word by word, like a reflection on fresh paint */
+.w { display: inline-block; --base: #d2d7db; background: linear-gradient(110deg, var(--base) 38%, #ffffff 46%, #e6fffc 50%, #ffffff 54%, var(--base) 62%); background-size: 300% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .06em; }
+em .w, .w.accent { --base: var(--accent); }
+.hero .w { animation: rise .9s cubic-bezier(.2,.8,.2,1) both, glint 7s ease-in-out infinite; animation-delay: calc(var(--i) * .1s), calc(1.3s + var(--i) * .16s); }
+.reveal.in .w, .w.once { animation: glint 1.8s ease-in-out both; animation-delay: calc(.35s + var(--i) * .12s); }
+@keyframes rise { from { opacity: 0; transform: translateY(.45em); filter: blur(8px); } }
+@keyframes glint { 0% { background-position: 100% 0; } 22%, 100% { background-position: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .w { animation: none !important; } }

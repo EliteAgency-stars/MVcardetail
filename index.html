@@ -11,7 +11,7 @@
 <meta property="og:image" content="/img/setmore-1.webp">
 <link rel="icon" href="/img/logo.webp">
 <link rel="apple-touch-icon" href="/img/logo.webp">
-<link rel="preload" href="/fonts/cabinet-grotesk-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 <style>
@@ -39,7 +39,7 @@
   .offer p { margin: 0; color: #cfd3d7; max-width: 640px; }
   .offer .prices { text-align: right; }
   .offer .was { color: var(--muted); text-decoration: line-through; font-size: 20px; }
-  .offer .now { font-family: var(--display); font-weight: 900; font-size: 64px; line-height: 1; color: var(--offer); }
+  .offer .now { font-family: var(--display); font-weight: 600; font-size: 64px; line-height: 1; color: var(--offer); }
   .offer .btn { margin-top: 12px; background: var(--offer); color: #241600; border: 0; }
   .offer::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%); transform: translateX(-100%); animation: sheen 5s ease-in-out infinite; pointer-events: none; }
   @keyframes sheen { 60%, 100% { transform: translateX(100%); } }
@@ -96,7 +96,7 @@
   /* Steps */
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: s; }
   .steps .card { padding: 28px; }
-  .steps .card::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-weight: 900; font-size: 52px; color: transparent; -webkit-text-stroke: 1px var(--accent); display: block; line-height: 1; margin-bottom: 16px; }
+  .steps .card::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-weight: 600; font-size: 52px; color: transparent; -webkit-text-stroke: 1px var(--accent); display: block; line-height: 1; margin-bottom: 16px; }
   .steps h3 { margin: 0 0 6px; font-size: 20px; }
   .steps p { margin: 0; color: var(--muted); }
   @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
@@ -237,7 +237,7 @@
 <a class="fab-wa wa-link" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span data-icon="wa"></span></a>
 
 <script type="module">
-import { loadContent, money, dur, wa, esc, icons, reveal, offerFor, HOURS } from '/assets/common.js';
+import { loadContent, money, dur, wa, esc, icons, reveal, shineText, offerFor, HOURS } from '/assets/common.js';
 
 const waUrl = wa('Hi MV Car Detail! I would like a quote for my vehicle.');
 document.querySelectorAll('.wa-link, #hero-wa').forEach(a => a.href = waUrl);
@@ -251,6 +251,7 @@ document.getElementById('hours').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(i =>
   `<tr class="${i === todayIdx ? 'today' : ''}"><td>${days[i]}</td><td>${HOURS[i] ? t(HOURS[i][0]) + ' – ' + t(HOURS[i][1]) : 'Closed'}</td></tr>`).join('');
 
 icons();
+shineText();
 reveal();
 
 const { services, offer, photos, testimonials } = await loadContent();

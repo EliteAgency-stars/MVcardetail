@@ -65,6 +65,28 @@ const I = {
 export function icons(root = document) {
   root.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = I[el.dataset.icon] || ''; });
 }
+// Wrap each word of .display headings in <span class="w"> so the shine can travel word by word.
+export function shineText(root = document) {
+  root.querySelectorAll('.display:not([data-shine])').forEach(el => {
+    el.dataset.shine = '';
+    el.setAttribute('aria-label', el.textContent.trim());
+    let i = 0;
+    const walk = node => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 1) return walk(n);
+      if (n.nodeType !== 3 || !n.textContent.trim()) return;
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) return frag.append(part);
+        const s = document.createElement('span');
+        s.className = 'w'; s.style.setProperty('--i', i++); s.setAttribute('aria-hidden', 'true'); s.textContent = part;
+        frag.append(s);
+      });
+      n.replaceWith(frag);
+    });
+    walk(el);
+  });
+}
 export function reveal() {
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
   document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));

@@ -1,4 +1,4 @@
-import { sb, loadContent, money, dur, wa, esc, icons, offerFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
+import { sb, shineText, loadContent, money, dur, wa, esc, icons, offerFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
 
 const $ = id => document.getElementById(id);
 const form = $('form');
@@ -7,6 +7,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 document.querySelectorAll('.wa-link').forEach(a => a.href = wa('Hi MV Car Detail! I have a question about booking.'));
 icons();
+shineText();
 
 const state = { service: null, day: null, start: null, slots: [] };
 
