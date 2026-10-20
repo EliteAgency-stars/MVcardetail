@@ -132,13 +132,24 @@
   .gbar h2 { font-size: clamp(32px, 4.6vw, 58px); margin: 0; flex: 1 1 360px; }
   .gscore { display: grid; gap: 2px; font-size: 14px; color: var(--muted); }
   .gscore .stars { color: var(--offer); font-size: 22px; letter-spacing: 3px; }
+  .faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 24px 56px; align-items: start; }
+  .faq h2 { font-size: clamp(32px, 4.6vw, 58px); margin: 0 0 12px; }
+  .faq .muted a { color: var(--accent); }
+  .qa { border-bottom: 1px solid var(--line); }
+  .qa summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; font-weight: 600; font-size: 17px; }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; transition: transform .25s; }
+  .qa[open] summary::after { transform: rotate(45deg); }
+  .qa p { margin: 0 0 18px; color: #c9ced3; max-width: 60ch; }
+  @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } }
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you come to me?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We are fully mobile and work at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte."}}, {"@type": "Question", "name": "What do I need to have ready?", "acceptedAnswer": {"@type": "Answer", "text": "Access to the vehicle and permission to work at the location. Please remove valuables. Someone should hand us the car at the start and check it with us at the end."}}, {"@type": "Question", "name": "How long does a detail take?", "acceptedAnswer": {"@type": "Answer", "text": "From about 45 minutes for an Exterior Wash to around 4 hours for a Premium Detail. Larger or very dirty vehicles can take longer."}}, {"@type": "Question", "name": "Why do prices say \"from\"?", "acceptedAnswer": {"@type": "Answer", "text": "Prices are for standard sedans and coupes in average condition. SUVs, trucks, pet hair, heavy stains or excessive dirt can change the price, and we always confirm it with you before we start."}}, {"@type": "Question", "name": "How do I pay?", "acceptedAnswer": {"@type": "Answer", "text": "After the service, once you have inspected the car. We accept debit and credit cards."}}, {"@type": "Question", "name": "Can you remove pet hair and stains?", "acceptedAnswer": {"@type": "Answer", "text": "Interior and Premium Details include light stain treatment. Heavy stains, deep extraction and excessive pet hair are quoted separately so you know the price upfront."}}, {"@type": "Question", "name": "Do you offer ceramic coating and paint correction?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We also do buffing, polishing and headlight restoration. These are quoted per vehicle: send us photos on WhatsApp."}}, {"@type": "Question", "name": "Do you detail boats and aircraft?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Besides cars, SUVs and trucks, we work at marinas and hangars. Message us for a quote."}}, {"@type": "Question", "name": "What products do you use?", "acceptedAnswer": {"@type": "Answer", "text": "Professional-grade products. We are Meguiar's certified and have been detailing since 2018."}}, {"@type": "Question", "name": "What if it rains or I need to reschedule?", "acceptedAnswer": {"@type": "Answer", "text": "Message us on WhatsApp as early as possible. If the weather makes exterior work unsafe, we will contact you to move the appointment."}}, {"@type": "Question", "name": "What if I'm not happy with the result?", "acceptedAnswer": {"@type": "Answer", "text": "Tell us before we leave or within 24 hours with photos. We will review it with you and make it right where reasonable."}}]}</script>
 </head>
 <body>
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="/" aria-label="MV Car Detail home"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="46" height="46"></a>
-    <nav><a href="#work">Our work</a><a href="#pricing">Pricing</a><a href="#reviews">Reviews</a><a href="#visit">Hours & areas</a></nav>
+    <nav><a href="#work">Our work</a><a href="#pricing">Pricing</a><a href="#reviews">Reviews</a><a href="#faq">FAQ</a><a href="#visit">Hours</a></nav>
     <a class="btn primary small" href="/booking">Book now</a>
   </div>
 </header>
@@ -205,6 +216,26 @@
     </div>
   </section>
 
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="reveal"><h2 class="display">Questions, answered.</h2>
+        <p class="muted">Something else? <a href="#" class="wa-link" target="_blank" rel="noopener">Ask us on WhatsApp</a>.</p></div>
+      <div class="qas reveal">
+        <details class="qa"><summary>Do you come to me?</summary><p>Yes. We are fully mobile and work at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte.</p></details>
+        <details class="qa"><summary>What do I need to have ready?</summary><p>Access to the vehicle and permission to work at the location. Please remove valuables. Someone should hand us the car at the start and check it with us at the end.</p></details>
+        <details class="qa"><summary>How long does a detail take?</summary><p>From about 45 minutes for an Exterior Wash to around 4 hours for a Premium Detail. Larger or very dirty vehicles can take longer.</p></details>
+        <details class="qa"><summary>Why do prices say &quot;from&quot;?</summary><p>Prices are for standard sedans and coupes in average condition. SUVs, trucks, pet hair, heavy stains or excessive dirt can change the price, and we always confirm it with you before we start.</p></details>
+        <details class="qa"><summary>How do I pay?</summary><p>After the service, once you have inspected the car. We accept debit and credit cards.</p></details>
+        <details class="qa"><summary>Can you remove pet hair and stains?</summary><p>Interior and Premium Details include light stain treatment. Heavy stains, deep extraction and excessive pet hair are quoted separately so you know the price upfront.</p></details>
+        <details class="qa"><summary>Do you offer ceramic coating and paint correction?</summary><p>Yes. We also do buffing, polishing and headlight restoration. These are quoted per vehicle: send us photos on WhatsApp.</p></details>
+        <details class="qa"><summary>Do you detail boats and aircraft?</summary><p>Yes. Besides cars, SUVs and trucks, we work at marinas and hangars. Message us for a quote.</p></details>
+        <details class="qa"><summary>What products do you use?</summary><p>Professional-grade products. We are Meguiar&#x27;s certified and have been detailing since 2018.</p></details>
+        <details class="qa"><summary>What if it rains or I need to reschedule?</summary><p>Message us on WhatsApp as early as possible. If the weather makes exterior work unsafe, we will contact you to move the appointment.</p></details>
+        <details class="qa"><summary>What if I&#x27;m not happy with the result?</summary><p>Tell us before we leave or within 24 hours with photos. We will review it with you and make it right where reasonable.</p></details>
+      </div>
+    </div>
+  </section>
+
   <section id="visit" style="padding-top:0">
     <div class="wrap visit">
       <div class="card reveal">
@@ -237,7 +268,7 @@
 
 <footer class="footer">
   <div class="wrap">
-    <span>© <span id="year"></span> MV Professional Car Detail & Supplies · Miami, FL – Charlotte, NC</span>
+    <span>© <span id="year"></span> MV Professional Car Detail & Supplies · Miami, FL – Charlotte, NC · <a href="/terms">Terms & Conditions</a> · <a href="#faq">FAQ</a></span>
     <div class="socials">
       <a href="https://www.instagram.com/mvcardetail" target="_blank" rel="noopener" aria-label="Instagram"><span data-icon="ig"></span></a>
       <a href="https://www.facebook.com/MVcardetail/" target="_blank" rel="noopener" aria-label="Facebook"><span data-icon="fb"></span></a>
