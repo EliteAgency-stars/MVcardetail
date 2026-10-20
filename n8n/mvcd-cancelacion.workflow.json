@@ -1,0 +1,275 @@
+{
+  "name": "MV Car Detail · Reserva cancelada",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mvcd/cancel",
+        "responseMode": "onReceived",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "mvcd-cancel"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "mvcd_bookings",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.body.booking_id }}"
+            }
+          ]
+        }
+      },
+      "name": "Booking",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "THvLwrLqw5eFmIfU",
+          "name": "Supabase · Proyectum IA (service role)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "Really cancelled",
+              "leftValue": "={{ $json.status }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "cancelled"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Really cancelled",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Admin email template — Proyectum IA design (tables + inline styles for email clients). Prepended to n8n Code nodes by build.py.\nconst SITE = 'https://mvcardetail.com';\nconst PROYECTUM = 'https://ia.proyectumia.com';\nconst h = s => String(s ?? '').replace(/[&<>\"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;' }[c]));\nfunction emailHtml({ kicker, title, intro, rows, buttons }) {\n  const row = ([k, v]) => `<tr><td style=\"padding:9px 0;border-bottom:1px solid #134753;font-family:Arial,sans-serif;font-size:13px;color:#8fb6bb;width:38%;vertical-align:top;\">${h(k)}</td><td style=\"padding:9px 0;border-bottom:1px solid #134753;font-family:Arial,sans-serif;font-size:14px;color:#eafffd;font-weight:bold;\">${h(v)}</td></tr>`;\n  const btn = ([label, url], i) => `<a href=\"${h(url)}\" style=\"display:inline-block;margin:0 8px 10px 0;padding:13px 22px;border-radius:999px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;text-decoration:none;${i === 0 ? 'background:#22FDF9;color:#03181c;' : 'background:#0a2933;color:#22FDF9;border:1px solid #134753;'}\">${h(label)}</a>`;\n  return `<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>${h(title)}</title></head>\n<body style=\"margin:0;padding:0;background:#04141a;font-family:Arial,Helvetica,sans-serif;\">\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#04141a;padding:32px 16px;\"><tr><td align=\"center\">\n<table role=\"presentation\" width=\"100%\" style=\"max-width:560px;background:#071f27;border:1px solid #134753;border-radius:20px;overflow:hidden;\">\n  <tr><td style=\"background:linear-gradient(100deg,#22FDF9,#7ff5f2);background-color:#22FDF9;padding:24px 32px;text-align:center;\">\n    <span style=\"font-family:Arial,sans-serif;font-weight:bold;font-size:13px;letter-spacing:2px;color:#03181c;text-transform:uppercase;\">Proyectum IA · MV Car Detail</span>\n  </td></tr>\n  <tr><td style=\"padding:34px 32px 8px;\">\n    <p style=\"margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#22FDF9;\">${h(kicker)}</p>\n    <h1 style=\"margin:0 0 16px;font-family:Arial,sans-serif;font-size:24px;line-height:1.25;color:#eafffd;\">${h(title)}</h1>\n    <p style=\"margin:0 0 18px;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#c7e6e3;\">${h(intro)}</p>\n    <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;margin:6px 0 24px;background:#0a2933;border:1px solid #134753;border-radius:14px;\"><tr><td style=\"padding:10px 20px;\">\n      <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">${rows.map(row).join('')}</table>\n    </td></tr></table>\n    <div>${buttons.map(btn).join('')}</div>\n  </td></tr>\n  <tr><td style=\"padding:16px 32px 8px;\">\n    <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;background:#0a2933;border:1px solid #22FDF9;border-radius:14px;\"><tr><td style=\"padding:20px 22px;text-align:center;\">\n      <p style=\"margin:0 0 6px;font-family:Arial,sans-serif;font-size:17px;font-weight:bold;color:#eafffd;\">Aprende a usar la IA TÚ:</p>\n      <p style=\"margin:0 0 14px;font-family:Arial,sans-serif;font-size:13px;line-height:1.5;color:#c7e6e3;\">Automatizaciones como esta, contenido y estrategia con Inteligencia Artificial para tu negocio.</p>\n      <a href=\"${PROYECTUM}\" style=\"display:inline-block;padding:12px 24px;border-radius:999px;background:#22FDF9;color:#03181c;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;text-decoration:none;\">Conoce Proyectum IA →</a>\n    </td></tr></table>\n  </td></tr>\n  <tr><td style=\"padding:20px 32px 30px;\">\n    <hr style=\"border:none;border-top:1px solid #134753;margin:0 0 16px;\">\n    <p style=\"margin:0;font-family:Arial,sans-serif;font-size:11px;line-height:1.6;color:#8fb6bb;\">\n      Automatic notification for MV Car Detail · <a href=\"${SITE}\" style=\"color:#22FDF9;\">mvcardetail.com</a> · +1 954 268 7993<br>\n      Built and automated by <a href=\"${PROYECTUM}\" style=\"color:#22FDF9;\">Proyectum IA</a> · contact@proyectumia.com\n    </p>\n  </td></tr>\n</table></td></tr></table></body></html>`;\n}\n\nconst b = $('Booking').first().json;\nconst start = DateTime.fromISO(b.start_at).setZone('America/New_York');\nreturn [{ json: { ...b,\n  subject: `Booking cancelled: ${b.service_name} · ${start.toFormat('ccc LLL d, h:mm a')} · ${b.name}`,\n  html: emailHtml({\n    kicker: 'Booking cancelled', title: `${b.name}'s ${b.service_name} was cancelled`,\n    intro: 'The booking was cancelled from the admin panel. The time slot is open again on the website and the Google Calendar event was removed (the client was notified by Google).',\n    rows: [['Package', b.service_name], ['Was scheduled', `${start.toFormat('cccc, LLLL d · h:mm a')} ET`], ['Client', b.name], ['Phone', b.phone], ['Email', b.email]],\n    buttons: [['Open admin panel', `${SITE}/admin`]],\n  }) } }];\n"
+      },
+      "name": "Prepare",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "Has event",
+              "leftValue": "={{ $json.gcal_event_id }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Has event",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "list"
+        },
+        "eventId": "={{ $json.gcal_event_id }}",
+        "options": {
+          "sendUpdates": "all"
+        }
+      },
+      "name": "Delete event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1100,
+        -100
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "name": "Marketing Calendar"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: $('Prepare').first().json }];"
+      },
+      "name": "Email data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1320,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "mvcardetail01@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "MV Car Detail · Proyectum IA"
+        }
+      },
+      "name": "Email admin",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1540,
+        0
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "Marketing proyectum IA"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Booking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Booking": {
+      "main": [
+        [
+          {
+            "node": "Really cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Really cancelled": {
+      "main": [
+        [
+          {
+            "node": "Prepare",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Prepare": {
+      "main": [
+        [
+          {
+            "node": "Has event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has event": {
+      "main": [
+        [
+          {
+            "node": "Delete event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete event": {
+      "main": [
+        [
+          {
+            "node": "Email data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email data": {
+      "main": [
+        [
+          {
+            "node": "Email admin",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,0 +1,71 @@
+:root {
+  --bg: #070809;
+  --surface: #101215;
+  --surface-2: #171a1e;
+  --line: rgba(255, 255, 255, .09);
+  --text: #f3f4f5;
+  --muted: #9aa1a8;
+  --accent: #2ee6d6;
+  --accent-ink: #02201d;
+  --offer: #ffb020;
+  --ok: #16c172;
+  --danger: #ff5a5f;
+  --radius: 18px;
+  --display: 'Archivo', system-ui, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+.display { font-family: var(--display); font-stretch: 118%; font-weight: 800; letter-spacing: -.02em; line-height: .98; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 50; background: rgba(7, 8, 9, .82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 24px; height: 68px; }
+.nav .logo img { height: 46px; width: auto; }
+.nav nav { display: flex; gap: 22px; margin-left: auto; font-size: 14px; }
+.nav nav a { text-decoration: none; color: var(--muted); }
+.nav nav a:hover { color: var(--text); }
+@media (max-width: 760px) { .nav nav { display: none; } .nav .btn { margin-left: auto; } }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); text-decoration: none; font-weight: 600; cursor: pointer; transition: transform .15s, background .2s, box-shadow .2s; -webkit-tap-highlight-color: transparent; }
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.btn.primary:hover { box-shadow: 0 0 0 6px rgba(46, 230, 214, .16); }
+.btn.wa { background: #25d366; color: #052e16; border-color: transparent; }
+.btn.small { min-height: 38px; padding: 0 16px; font-size: 14px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn svg { width: 20px; height: 20px; flex: none; }
+
+/* Floating WhatsApp */
+.fab-wa { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 60; width: 58px; height: 58px; border-radius: 50%; background: #25d366; display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, .45); }
+.fab-wa svg { width: 30px; height: 30px; fill: #fff; }
+
+/* Cards & forms */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+label.field { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+.input, input[type=text], input[type=email], input[type=tel], input[type=number], input[type=password], select, textarea {
+  width: 100%; min-height: 48px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--text); font-size: 16px; /* 16px stops iOS zoom */
+}
+textarea { min-height: 96px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+
+.footer { border-top: 1px solid var(--line); padding: 40px 0 calc(40px + env(safe-area-inset-bottom)); color: var(--muted); font-size: 14px; }
+.footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; }
+.socials { display: flex; gap: 10px; }
+.socials a { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; }
+.socials svg { width: 18px; height: 18px; fill: currentColor; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

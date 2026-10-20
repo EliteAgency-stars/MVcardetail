@@ -1,0 +1,128 @@
+{
+  "name": "MV Car Detail · Sincronizar Google Calendar",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "name": "Every 5 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "primary",
+          "mode": "list"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 45 }).toISO() }}",
+        "options": {
+          "singleEvents": true
+        }
+      },
+      "name": "Calendar events",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        220,
+        0
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "name": "Marketing Calendar"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Busy blocks from Google Calendar that did NOT come from a website booking (those are already in mvcd_slots).\nconst events = [];\nfor (const { json: e } of $input.all()) {\n  if (!e.id || e.status === 'cancelled' || e.transparency === 'transparent') continue;\n  if ((e.description || '').includes('[mvcd:')) continue;\n  const start = e.start?.dateTime || (e.start?.date && DateTime.fromISO(e.start.date, { zone: 'America/New_York' }).toISO());\n  const end = e.end?.dateTime || (e.end?.date && DateTime.fromISO(e.end.date, { zone: 'America/New_York' }).toISO());\n  if (start && end) events.push({ id: e.id, start, end });\n}\nreturn [{ json: { events } }];\n"
+      },
+      "name": "Busy blocks",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://opagblruzwsrxsggkjsa.supabase.co/rest/v1/rpc/mvcd_sync_gcal",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ p_events: $json.events }) }}",
+        "options": {}
+      },
+      "name": "Save to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "THvLwrLqw5eFmIfU",
+          "name": "Supabase · Proyectum IA (service role)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 5 minutes": {
+      "main": [
+        [
+          {
+            "node": "Calendar events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar events": {
+      "main": [
+        [
+          {
+            "node": "Busy blocks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busy blocks": {
+      "main": [
+        [
+          {
+            "node": "Save to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

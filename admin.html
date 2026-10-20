@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Admin · MV Car Detail</title>
+<meta name="theme-color" content="#070809">
+<link rel="icon" href="/img/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .login { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; }
+  .login form { width: min(400px, 100%); padding: 32px; display: grid; gap: 16px; }
+  .login img { height: 70px; width: auto; margin: 0 auto 4px; }
+  .login h1 { margin: 0; text-align: center; font-size: 20px; }
+  .err { color: var(--danger); font-size: 14px; min-height: 1em; margin: 0; }
+
+  .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 16px 0; position: sticky; top: 68px; background: var(--bg); z-index: 5; }
+  .tabs button { flex: none; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 14px; }
+  .tabs button[aria-selected=true] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+  .panel { padding: 8px 0 80px; display: grid; gap: 14px; }
+  .panel h2 { margin: 6px 0 0; font-family: var(--display); font-stretch: 112%; font-size: 26px; }
+  .box { padding: 20px; display: grid; gap: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  .toggle input { width: 20px; height: 20px; accent-color: var(--accent); }
+  .saved { color: var(--ok); font-size: 14px; opacity: 0; transition: opacity .3s; }
+  .saved.on { opacity: 1; }
+
+  .bk { padding: 16px 18px; display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; }
+  .bk .meta { font-size: 14px; color: var(--muted); }
+  .bk .st { font: 700 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; padding: 5px 10px; border-radius: 99px; background: var(--surface-2); justify-self: end; }
+  .bk .st.confirmed { color: var(--accent); } .bk .st.cancelled { color: var(--danger); } .bk .st.done { color: var(--ok); }
+  .bk .acts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .ph { overflow: hidden; display: grid; }
+  .ph img { aspect-ratio: 4/3; object-fit: cover; width: 100%; }
+  .ph .f { padding: 12px; display: grid; gap: 8px; }
+  .drop { border: 2px dashed var(--line); border-radius: var(--radius); padding: 28px; text-align: center; cursor: pointer; }
+  .drop.over { border-color: var(--accent); background: rgba(46,230,214,.06); }
+  .tm { padding: 16px 18px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
+  .tm img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+  .btn.danger { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="login" id="login">
+  <form class="card" id="loginform">
+    <img src="/img/logo.webp" alt="MV Car Detail">
+    <h1>Admin access</h1>
+    <label class="field">Email<input type="email" name="email" autocomplete="username" required></label>
+    <label class="field">Password<input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="btn primary" type="submit">Sign in</button>
+    <p class="err" id="loginerr"></p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="nav"><div class="wrap">
+    <a class="logo" href="/" target="_blank"><img src="/img/logo.webp" alt="MV Car Detail" width="46" height="46"></a>
+    <span class="muted" style="font-size:14px">Admin</span>
+    <button class="btn small" id="logout" style="margin-left:auto">Sign out</button>
+  </div></header>
+  <main class="wrap">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="bookings" aria-selected="true">Bookings</button>
+      <button role="tab" data-tab="services">Services & prices</button>
+      <button role="tab" data-tab="offer">Offer</button>
+      <button role="tab" data-tab="photos">Photos</button>
+      <button role="tab" data-tab="testimonials">Testimonials</button>
+    </div>
+
+    <section class="panel" data-panel="bookings">
+      <div class="row"><h2>Bookings</h2>
+        <select id="bkfilter" style="width:auto;margin-left:auto"><option value="upcoming">Upcoming</option><option value="past">Past</option><option value="all">All</option></select></div>
+      <div id="bookings" class="panel" style="padding:0"></div>
+    </section>
+
+    <section class="panel" data-panel="services" hidden><h2>Services & prices</h2><div id="services" class="panel" style="padding:0"></div></section>
+
+    <section class="panel" data-panel="offer" hidden>
+      <h2>First-time client offer</h2>
+      <form class="card box" id="offerform">
+        <label class="toggle"><input type="checkbox" name="active"> Offer active</label>
+        <div class="grid">
+          <label class="field">Applies to<select name="service" id="offerservice"></select></label>
+          <label class="field">Offer price ($)<input type="number" name="price" min="0" step="1" required></label>
+          <label class="field">Code<input type="text" name="code" required></label>
+        </div>
+        <label class="field">Headline<input type="text" name="headline" required></label>
+        <label class="field">Detail<textarea name="detail" rows="3"></textarea></label>
+        <div class="row"><button class="btn primary" type="submit">Save offer</button><span class="saved">Saved ✓</span></div>
+      </form>
+    </section>
+
+    <section class="panel" data-panel="photos" hidden>
+      <h2>Photos</h2>
+      <p class="muted" style="margin:0">“Hero” is the big image at the top of the landing page (the first one is used). “Gallery” photos appear in Our work and on the booking page.</p>
+      <label class="drop" id="drop"><input type="file" id="files" accept="image/*" multiple hidden><b>Upload photos</b><br><span class="muted">Click or drop images here — they're resized automatically</span></label>
+      <div class="photos" id="photos"></div>
+    </section>
+
+    <section class="panel" data-panel="testimonials" hidden>
+      <h2>Testimonials</h2>
+      <form class="card box" id="tform">
+        <div class="grid">
+          <label class="field">Client name<input type="text" name="name" required></label>
+          <label class="field">Vehicle<input type="text" name="vehicle" placeholder="2023 Tesla Model Y"></label>
+          <label class="field">Rating<select name="rating"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label>
+          <label class="field">Photo (optional)<input type="file" name="photo" accept="image/*"></label>
+        </div>
+        <label class="field">Testimonial<textarea name="text" rows="3" required></textarea></label>
+        <div class="row"><button class="btn primary" type="submit">Add testimonial</button><span class="saved">Added ✓</span></div>
+      </form>
+      <div id="tlist" class="panel" style="padding:0"></div>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="/assets/admin.js"></script>
+</body>
+</html>
