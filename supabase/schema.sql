@@ -260,3 +260,7 @@ grant execute on function public.mvcd_sync_gcal to service_role;
 insert into public.mvcd_settings (key, value) values
 ('google', '{"rating": 5.0, "count": 17, "url": "https://maps.app.goo.gl/Kv2w4gDw9cT3go1c7"}')
 on conflict (key) do nothing;
+
+-- Card photo per service (used on /landing), and the shop's Google profile
+alter table public.mvcd_services add column if not exists image_url text not null default '';
+update public.mvcd_settings set value = '{"rating": 4.9, "count": 46, "url": "https://maps.app.goo.gl/iEH7dF7M1SHxewJR6", "address": "3937 Pembroke Rd, Hollywood, FL 33021", "linkme": "https://link.me/mvcardetail"}' where key = 'google';

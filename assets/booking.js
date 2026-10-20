@@ -141,6 +141,15 @@ function summary() {
     form.name.value.trim() && form.phone.value.trim() && /\S+@\S+\.\S+/.test(form.email.value) && form.vehicle.value.trim()][i]));
 }
 form.addEventListener('input', summary);
+// "Our shop": the address is the shop's, no need to type it
+const SHOP = '3937 Pembroke Rd, Hollywood, FL 33021';
+form.addEventListener('change', e => {
+  if (e.target.name !== 'city') return;
+  const shop = e.target.value.startsWith('Shop');
+  if (shop) form.address.value = SHOP; else if (form.address.value === SHOP) form.address.value = '';
+  form.address.readOnly = shop;
+  summary();
+});
 
 // ---------- Submit + Rappi-style confirmation ----------
 const ov = $('ov');

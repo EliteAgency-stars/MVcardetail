@@ -70,6 +70,7 @@ async function loadServices() {
       <label class="field">Duration (minutes)<input type="number" name="duration_min" min="15" step="5" value="${s.duration_min}" required></label>
     </div>
     <label class="field">Short description<input type="text" name="tagline" value="${esc(s.tagline)}"></label>
+    <label class="field">Card photo on /landing (URL, e.g. one from the Photos tab)<input type="text" name="image_url" value="${esc(s.image_url || '')}"></label>
     <label class="field">What's included (one per line)<textarea name="includes" rows="6">${esc(s.includes.join('\n'))}</textarea></label>
     <label class="field">Fine print<textarea name="note" rows="2">${esc(s.note)}</textarea></label>
     <div class="row">
@@ -83,7 +84,7 @@ $('services').onsubmit = async e => {
   e.preventDefault();
   const f = e.target, d = Object.fromEntries(new FormData(f));
   const row = {
-    name: d.name.trim(), price: +d.price, duration_min: +d.duration_min, tagline: d.tagline.trim(), note: d.note.trim(),
+    name: d.name.trim(), price: +d.price, duration_min: +d.duration_min, tagline: d.tagline.trim(), note: d.note.trim(), image_url: (d.image_url || '').trim(),
     includes: d.includes.split('\n').map(x => x.trim()).filter(Boolean), popular: !!d.popular, active: !!d.active,
   };
   const { error } = await sb.from('mvcd_services').update(row).eq('slug', f.dataset.slug);
@@ -131,6 +132,7 @@ async function loadPhotos() {
     <img src="${esc(p.url)}" alt="" loading="lazy">
     <div class="f">
       <input type="text" name="caption" value="${esc(p.caption)}" placeholder="Caption">
+      <input type="text" readonly value="${esc(p.url)}" onclick="this.select()" title="Photo link: copy it into a service's card photo" style="font-size:12px;min-height:36px;color:var(--muted)">
       <div class="row" style="flex-wrap:nowrap">
         <select name="section"><option value="gallery" ${p.section === 'gallery' ? 'selected' : ''}>Gallery</option><option value="hero" ${p.section === 'hero' ? 'selected' : ''}>Hero</option></select>
         <input type="number" name="sort" value="${p.sort}" title="Order" style="width:80px">

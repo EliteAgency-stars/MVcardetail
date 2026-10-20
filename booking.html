@@ -50,7 +50,7 @@
   .pkg-detail ul { margin: 6px 0 0; padding-left: 18px; columns: 2; column-gap: 20px; }
   @media (max-width: 520px) { .pkg-detail ul { columns: 1; } }
 
-  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
   .seg label { padding: 12px; text-align: center; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 14px; font-weight: 600; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
   .seg label:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
@@ -189,6 +189,7 @@
         <div class="seg">
           <label><input type="radio" name="city" value="Miami-Dade / Broward, FL" checked>Miami · Broward</label>
           <label><input type="radio" name="city" value="Charlotte, NC">Charlotte, NC</label>
+          <label><input type="radio" name="city" value="Shop · Hollywood, FL">Our shop</label>
         </div>
         <input type="text" name="address" autocomplete="street-address" required placeholder="Address" aria-label="Service address">
       </div>
