@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <title>Admin · MV Car Detail</title>
 <meta name="theme-color" content="#070809">
-<link rel="icon" href="/img/logo.webp">
+<link rel="icon" href="/img/logo.webp" data-logo>
 <link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
@@ -85,7 +85,7 @@
 <body>
 <div class="login" id="login">
   <form class="card" id="loginform">
-    <img src="/img/logo.webp" alt="MV Car Detail">
+    <img data-logo src="/img/logo.webp" alt="MV Car Detail">
     <h1>Admin access</h1>
     <label class="field">Email<input type="email" name="email" autocomplete="username" required></label>
     <label class="field">Password<input type="password" name="password" autocomplete="current-password" required></label>
@@ -96,7 +96,7 @@
 
 <div id="app" hidden>
   <header class="nav"><div class="wrap">
-    <a class="logo" href="/" target="_blank"><img src="/img/logo.webp" alt="MV Car Detail" width="46" height="46"></a>
+    <a class="logo" href="/" target="_blank"><img data-logo src="/img/logo.webp" alt="MV Car Detail" width="46" height="46"></a>
     <span class="muted" style="font-size:14px">Admin</span>
     <button class="btn small" id="logout" style="margin-left:auto">Sign out</button>
   </div></header>

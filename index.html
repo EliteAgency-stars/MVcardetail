@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#070809">
 <meta property="og:title" content="MV Car Detail · Book your detail">
 <meta property="og:image" content="/video/hero-poster.jpg">
-<link rel="icon" href="/img/logo.webp">
-<link rel="apple-touch-icon" href="/img/logo.webp">
+<link rel="icon" href="/img/logo.webp" data-logo>
+<link rel="apple-touch-icon" href="/img/logo.webp" data-logo>
 <link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
@@ -78,7 +78,7 @@
 
 <main class="wrap" data-blocks>
   <header class="top">
-    <a class="logo" href="/" aria-label="MV Car Detail"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="52" height="52"></a>
+    <a class="logo" href="/" aria-label="MV Car Detail"><img data-logo src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="52" height="52"></a>
     <a class="btn primary small" href="/booking" data-edit="top_button" data-label="Top button">Book now</a>
   </header>
 
@@ -133,7 +133,7 @@ const linkme = google?.linkme || 'https://link.me/mvcardetail';
 
 const serviceCard = s => {
   const o = offerFor(offer, s.slug);
-  return `<a class="svc" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}" style="--img:url('${esc(s.image_url || '')}')">
+  return `<a class="svc" data-card="${s.slug}" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}" style="--img:url('${esc(s.image_url || '')}')">
     ${o ? '<span class="tag" data-edit="tag_offer" data-label="Card label: offer">First visit offer</span>' : s.popular ? '<span class="tag pop" data-edit="tag_popular" data-label="Card label: popular">Most popular</span>' : ''}
     <span class="ico">${svg(ICONS[LEVEL_ICON[s.level]] || ICONS.car)}</span>
     <span>
@@ -145,7 +145,7 @@ const serviceCard = s => {
 };
 const customCard = x => {
   const url = safeUrl(x.url) || '/booking';
-  return `<a class="svc" href="${esc(url)}"${/^https?:/.test(url) ? ' target="_blank" rel="noopener"' : ''} style="--img:url('${esc(safeUrl(x.image))}')">
+  return `<a class="svc" data-card="${esc(x.id)}" href="${esc(url)}"${/^https?:/.test(url) ? ' target="_blank" rel="noopener"' : ''} style="--img:url('${esc(safeUrl(x.image))}')">
     <span class="ico">${svg(ICONS[x.icon] || ICONS.star)}</span>
     <span>
       <h2>${esc(x.title)}</h2>
@@ -154,7 +154,7 @@ const customCard = x => {
     </span>
   </a>`;
 };
-const contactCard = () => `<div class="svc contact">
+const contactCard = () => `<div class="svc contact" data-card="contact">
     <span class="ico">${phone}</span>
     <span>
       <h2 data-edit="contact_title" data-label="Contact card title">Contact us</h2>
@@ -174,7 +174,7 @@ const contactCard = () => `<div class="svc contact">
 function cardList(cfg) {
   const c = cfg.cards || {};
   const all = [
-    ...services.map(s => ({ id: s.slug, html: serviceCard(s) })),
+    ...services.map(s => ({ id: s.slug, html: serviceCard({ ...s, ...(cfg.serviceEdits?.[s.slug] || {}) }) })),
     ...(c.extra || []).filter(x => x?.id && x.title).map(x => ({ id: x.id, html: customCard(x) })),
     { id: 'contact', html: contactCard() },
   ];

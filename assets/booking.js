@@ -28,13 +28,18 @@ function renderPage(cfg) {
   shineText();
 }
 renderPage(pages.booking);
-onPreview(renderPage);
+onPreview(cfg => {
+  // Unsaved service edits from the admin (name, prices, duration) show up right away in the preview
+  services.forEach(s => Object.assign(s, cfg.serviceEdits?.[s.slug] || {}));
+  renderPage(cfg);
+  renderPkgs(); summary();
+});
 
 // ---------- Step 1-2: vehicle size + packages (prices follow the size) ----------
 function renderPkgs() {
   $('pkgs').innerHTML = services.map(s => {
     const o = offerFor(offer, s.slug), base = priceFor(s, state.size);
-    return `<label class="pkg"><input type="radio" name="service" value="${s.slug}" ${state.service?.slug === s.slug ? 'checked' : ''}>
+    return `<label class="pkg" data-card="${s.slug}"><input type="radio" name="service" value="${s.slug}" ${state.service?.slug === s.slug ? 'checked' : ''}>
       <b>${esc(s.name)}${o ? '<span class="tag deal">Offer</span>' : s.popular ? '<span class="tag">Popular</span>' : ''}</b>
       <span class="p">${o ? `<s>${money(base)}</s>${money(priceFor(s, state.size, o))}` : money(base)}</span>
       <small>${dur(s.duration_min)}</small></label>`;

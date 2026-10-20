@@ -14,7 +14,8 @@ Estático (HTML + JS sin build) en Vercel, datos en Supabase y automatizaciones 
 
 Cambios con vista previa en vivo (teléfono o escritorio); nada se publica hasta tocar **Save & publish**.
 
-- **Diseño** (todo el sitio): colores de acento, destacado, fondo, tarjetas y texto; fuente de títulos y de texto; títulos en mayúsculas; redondeo de esquinas.
+- **Clic para editar**: en la vista previa, al pasar el mouse se marca lo editable; un clic abre arriba sus opciones (tarjeta de servicio: nombre, precios por tamaño, duración, foto, "Most popular", mover u ocultar; tarjeta propia; texto; sección).
+- **Diseño** (todo el sitio): logo (subir uno nuevo o volver al de MV; cambia también el ícono de la pestaña), colores de acento, destacado, fondo, tarjetas y texto; fuente de títulos y de texto; títulos en mayúsculas; redondeo de esquinas.
 - **Home**: cualquier texto con editor (negrita, cursiva, color de acento, enlaces); orden y visibilidad de secciones; orden, visibilidad y tarjetas nuevas (título, texto, botón, enlace, foto, ícono); bloques propios de texto o de botones.
 - **Booking**: orden de los pasos (se renumeran solos) y secciones, ocultar el paso del vehículo, el carro 3D o la galería, títulos y botones, bloques propios de texto o botones en cualquier posición. Los pasos obligatorios no se pueden ocultar.
 

@@ -1,7 +1,7 @@
 // Admin "Site editor": theme, texts, sections, cards and custom blocks for the home and booking pages,
 // with a live preview (the real page in an iframe, re-rendered from the draft on every change).
 import { sb, esc } from '/assets/common.js';
-import { FONTS, THEME_DEFAULT, ICONS, sanitize } from '/assets/site.js';
+import { FONTS, THEME_DEFAULT, ICONS, LOGO_DEFAULT, sanitize } from '/assets/site.js';
 
 const $ = id => document.getElementById(id);
 const frame = $('ed-frame'), controls = $('ed-controls'), status = $('ed-status');
@@ -9,6 +9,7 @@ const SRC = { home: '/?preview=1', booking: '/booking.html?preview=1' };
 const COLORS = [['accent', 'Accent'], ['offer', 'Highlight'], ['bg', 'Background'], ['surface', 'Cards'], ['text', 'Text']];
 
 let draft = null, saved = '', page = 'home', meta = { texts: [], blocks: [], outside: [] }, services = [], photos = [];
+let picked = null; // what was clicked in the preview: { card } | { text } | { block }
 const open = new Set(); // custom blocks / cards whose edit form is expanded
 const uid = p => p + Math.random().toString(36).slice(2, 8);
 const cfg = () => (draft.pages[page] ||= {});
@@ -16,11 +17,11 @@ const cfg = () => (draft.pages[page] ||= {});
 async function load() {
   const [{ data: rows }, { data: sv }, { data: ph }] = await Promise.all([
     sb.from('mvcd_settings').select('key,value').in('key', ['theme', 'page_home', 'page_booking']),
-    sb.from('mvcd_services').select('slug,name').order('level'),
+    sb.from('mvcd_services').select('*').order('level'),
     sb.from('mvcd_photos').select('url,caption').order('sort'),
   ]);
   const v = Object.fromEntries((rows || []).map(r => [r.key, r.value]));
-  draft = { theme: { ...THEME_DEFAULT, ...(v.theme || {}) }, pages: { home: v.page_home || {}, booking: v.page_booking || {} } };
+  draft = { theme: { ...THEME_DEFAULT, ...(v.theme || {}) }, pages: { home: v.page_home || {}, booking: v.page_booking || {} }, services: {} };
   saved = JSON.stringify(draft);
   services = sv || []; photos = ph || [];
   setStatus();
@@ -29,17 +30,24 @@ async function load() {
 
 // ---------- Preview ----------
 function showPage(p) {
-  page = p;
+  page = p; picked = null;
   document.querySelectorAll('#ed-page button').forEach(b => b.setAttribute('aria-pressed', b.dataset.page === p));
   frame.src = SRC[p];
 }
 let t;
-const push = () => { clearTimeout(t); t = setTimeout(() => frame.contentWindow?.postMessage({ type: 'mvcd-preview', theme: draft.theme, page: cfg() }, location.origin), 120); };
+const push = () => { clearTimeout(t); t = setTimeout(() => frame.contentWindow?.postMessage({ type: 'mvcd-preview', theme: draft.theme, page: { ...cfg(), serviceEdits: draft.services } }, location.origin), 120); };
 const changed = () => { setStatus(); push(); };
 const setStatus = () => { status.textContent = JSON.stringify(draft) === saved ? 'All changes saved' : 'Unsaved changes'; };
 
 addEventListener('message', e => {
-  if (e.origin !== location.origin || e.data?.type !== 'mvcd-ready' || e.source !== frame.contentWindow) return;
+  if (e.origin !== location.origin || e.source !== frame.contentWindow) return;
+  if (e.data?.type === 'mvcd-pick') {
+    picked = { card: e.data.card, text: e.data.text, block: e.data.block };
+    renderControls();
+    controls.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (e.data?.type !== 'mvcd-ready') return;
   readMeta();
   push();
   renderControls();
@@ -59,7 +67,11 @@ const h = (tag, props = {}, ...kids) => { const el = Object.assign(document.crea
 const box = (title, ...kids) => h('div', { className: 'card ed-box' }, h('h3', { textContent: title }), ...kids);
 const btn = (text, onclick, title = '') => h('button', { type: 'button', textContent: text, onclick, title });
 const field = (label, input) => h('label', { className: 'field' }, label, input);
-const input = (value, oninput, props = {}) => h('input', { type: 'text', value: value ?? '', oninput: e => oninput(e.target.value), ...props });
+const input = (value, oninput, { list, ...props } = {}) => {
+  const el = h('input', { type: 'text', value: value ?? '', oninput: e => oninput(e.target.value), ...props });
+  if (list) el.setAttribute('list', list); // read-only property, must be an attribute
+  return el;
+};
 const move = (list, i, d) => { const j = i + d; if (j < 0 || j >= list.length) return; [list[i], list[j]] = [list[j], list[i]]; };
 const toggle = (arr, id) => arr.includes(id) ? arr.filter(x => x !== id) : [...arr, id];
 
@@ -90,7 +102,8 @@ function rich(value, onChange) {
 // ---------- Panels ----------
 function renderControls() {
   const scroll = controls.scrollTop;
-  controls.replaceChildren(themePanel(), sectionsPanel(), ...(page === 'home' ? [cardsPanel()] : []), textsPanel());
+  controls.replaceChildren(...(picked ? [selectedPanel()] : [h('p', { className: 'muted', style: 'margin:0;font-size:13px', textContent: 'Tip: click any card, text or section in the preview to edit it.' })]),
+    themePanel(), sectionsPanel(), ...(page === 'home' ? [cardsPanel()] : []), textsPanel());
   controls.scrollTop = scroll;
 }
 
@@ -100,7 +113,16 @@ function themePanel() {
     h('label', {}, h('input', { type: 'color', value: th[k], oninput: e => { th[k] = e.target.value; changed(); } }), label)));
   const fontSel = k => h('select', { onchange: e => { th[k] = e.target.value; changed(); } },
     Object.keys(FONTS).map(f => h('option', { value: f, textContent: f, selected: th[k] === f })));
-  return box('Design (whole website)', colors,
+  const logoImg = h('img', { src: th.logo || LOGO_DEFAULT, alt: 'Logo', style: 'height:56px;width:auto;border-radius:10px;background:#000' });
+  const logoFile = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async e => {
+    const f = e.target.files[0]; if (!f) return;
+    status.textContent = 'Uploading logo…';
+    try { th.logo = await uploadImage(f, 'logo', 600); logoImg.src = th.logo; changed(); renderControls(); } catch (err) { alert(err.message); setStatus(); }
+  } });
+  const logo = h('div', { className: 'row' }, logoImg,
+    h('label', { className: 'btn small' }, 'Upload new logo', logoFile),
+    th.logo ? btn('Use MV default', () => { th.logo = ''; changed(); renderControls(); }) : null);
+  return box('Design (whole website)', h('div', { className: 'ed-text-label', textContent: 'Logo' }), logo, colors,
     h('div', { className: 'grid' }, field('Headline font', fontSel('font_display')), field('Text font', fontSel('font_body'))),
     h('label', { className: 'toggle' }, h('input', { type: 'checkbox', checked: th.upper !== false, onchange: e => { th.upper = e.target.checked; changed(); } }), 'Headlines in CAPITALS'),
     field(`Corner roundness`, h('input', { type: 'range', min: 0, max: 32, value: th.radius, oninput: e => { th.radius = +e.target.value; changed(); } })),
@@ -200,13 +222,91 @@ function textsPanel() {
   return box('Texts', h('p', { className: 'muted', style: 'margin:0;font-size:13px', textContent: 'Select words and use A to paint them in the accent color.' }), ...rows);
 }
 
+// ---------- Clicked in the preview ----------
+function selectedPanel() {
+  const { card, text, block } = picked;
+  const close = h('div', {}, btn('Close', () => { picked = null; renderControls(); }));
+  const c = cfg();
+  if (card) {
+    const svc = services.find(x => x.slug === card);
+    const extra = (c.cards?.extra || []).find(x => x.id === card);
+    const title = svc ? (draft.services[svc.slug]?.name ?? svc.name) : extra ? extra.title : 'Contact us';
+    const parts = [];
+    if (svc) parts.push(serviceForm(svc));
+    if (extra) parts.push(cardForm(extra));
+    if (card === 'contact') parts.push(textField('contact_title'));
+    if (page === 'home') parts.push(cardMoveRow(card));
+    return selBox(`Card: ${title}`, ...parts, close);
+  }
+  if (text) return selBox('Text', textField(text), close);
+  if (block) {
+    const b = meta.blocks.find(x => x.id === block) || meta.outside.find(x => x.id === block);
+    const custom = (c.blocks || []).find(x => x.id === block);
+    return selBox(`Section: ${custom?.title || b?.label || block}`, custom ? blockForm(custom) : h('p', { className: 'muted', style: 'margin:0', textContent: 'Move or hide it in the sections list below.' }), close);
+  }
+  return h('div');
+}
+const selBox = (title, ...kids) => { const el = box(title, ...kids); el.style.borderColor = 'var(--accent)'; el.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent)'; return el; };
+
+// Service details edited from the preview; saved to the services on publish
+function serviceForm(sv) {
+  const val = k => draft.services[sv.slug]?.[k] ?? sv[k];
+  const set = (k, v) => { (draft.services[sv.slug] ||= {})[k] = v; changed(); };
+  const num = (label, k, step = 1) => field(label, h('input', { type: 'number', min: 0, step, value: val(k), oninput: ev => set(k, +ev.target.value) }));
+  const dl = h('datalist', { id: `sv-ph-${sv.slug}` }, photos.map(p => h('option', { value: p.url, textContent: p.caption })));
+  return h('div', { className: 'ed-sub' },
+    field('Name', input(val('name'), v => set('name', v))),
+    h('div', { className: 'grid' }, num('Sedan / Coupe ($)', 'price'), num('SUV / Crossover ($)', 'price_suv'), num('Truck / Large SUV / Van ($)', 'price_truck')),
+    num('Duration (minutes)', 'duration_min', 5),
+    field('Card photo (pick one of your photos or paste a link)', input(val('image_url'), v => set('image_url', v), { list: `sv-ph-${sv.slug}` })), dl,
+    h('label', { className: 'toggle' }, h('input', { type: 'checkbox', checked: !!val('popular'), onchange: ev => set('popular', ev.target.checked) }), '"Most popular" label'),
+    h('p', { className: 'muted', style: 'margin:0;font-size:12px', textContent: 'Included items and fine print are in the "Services & prices" tab.' }));
+}
+function cardMoveRow(id) {
+  const k = (cfg().cards ||= {}); k.hidden ||= [];
+  const i = (k.order || []).indexOf(id), off = k.hidden.includes(id);
+  return h('div', { className: 'row' },
+    btn('↑ Move up', () => { if (i > 0) { move(k.order, i, -1); changed(); renderControls(); } }),
+    btn('↓ Move down', () => { if (i >= 0) { move(k.order, i, 1); changed(); renderControls(); } }),
+    btn(off ? 'Show card' : 'Hide card', () => { k.hidden = toggle(k.hidden, id); changed(); renderControls(); }));
+}
+function textField(key) {
+  const c = cfg(); c.texts ||= {};
+  const tx = meta.texts.find(x => x.key === key) || { key, label: key, orig: '' };
+  const holder = h('div');
+  const draw = () => holder.replaceChildren(rich(c.texts[key] || tx.orig, v => { c.texts[key] = v; changed(); }));
+  draw();
+  setTimeout(() => holder.querySelector('.rt-box')?.focus({ preventScroll: true }), 50);
+  return h('div', {}, h('div', { className: 'ed-text-label' }, h('span', { textContent: tx.label }), btn('Reset', () => { delete c.texts[key]; changed(); draw(); })), holder);
+}
+
+// Image upload to the site's storage (downscaled WebP, transparency kept)
+async function uploadImage(file, folder, max = 1600) {
+  const bmp = await createImageBitmap(file);
+  const k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const cv = Object.assign(document.createElement('canvas'), { width: Math.round(bmp.width * k), height: Math.round(bmp.height * k) });
+  cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+  const blob = await new Promise(r => cv.toBlob(r, 'image/webp', .9));
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
+  const { error } = await sb.storage.from('mvcd-media').upload(path, blob, { contentType: 'image/webp' });
+  if (error) throw error;
+  return sb.storage.from('mvcd-media').getPublicUrl(path).data.publicUrl;
+}
+
 // ---------- Save / discard ----------
 $('ed-save').onclick = async () => {
   const b = $('ed-save'); b.disabled = true;
   const { error } = await sb.from('mvcd_settings').upsert([
     { key: 'theme', value: draft.theme }, { key: 'page_home', value: draft.pages.home }, { key: 'page_booking', value: draft.pages.booking }]);
+  let err = error;
+  for (const [slug, row] of Object.entries(draft.services)) {
+    if (err || !Object.keys(row).length) continue;
+    ({ error: err } = await sb.from('mvcd_services').update(row).eq('slug', slug));
+    if (!err) Object.assign(services.find(x => x.slug === slug) || {}, row);
+  }
   b.disabled = false;
-  if (error) return alert(error.message);
+  if (err) return alert(err.message);
+  draft.services = {};
   saved = JSON.stringify(draft); setStatus();
   status.textContent = 'Published ✓';
 };

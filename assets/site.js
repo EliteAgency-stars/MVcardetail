@@ -15,8 +15,9 @@ export const FONTS = {
 };
 export const THEME_DEFAULT = {
   accent: '#2ee6d6', offer: '#ffb020', bg: '#070809', surface: '#101215', text: '#f3f4f5',
-  font_display: 'General Sans', font_body: 'Satoshi', upper: true, radius: 18,
+  font_display: 'General Sans', font_body: 'Satoshi', upper: true, radius: 18, logo: '',
 };
+export const LOGO_DEFAULT = '/img/logo.webp';
 
 // Readable ink on top of a color (buttons on the accent)
 const ink = hex => {
@@ -43,10 +44,11 @@ export function applyTheme(theme, { cache = true } = {}) {
   if (t.font_body in FONTS) r.setProperty('--body', `'${t.font_body}', system-ui, sans-serif`);
   r.setProperty('--display-case', t.upper === false ? 'none' : 'uppercase');
   r.setProperty('--radius', `${Math.min(32, Math.max(0, +t.radius || 0))}px`);
+  const logo = safeUrl(t.logo) || LOGO_DEFAULT;
+  const setLogo = () => document.querySelectorAll('[data-logo]').forEach(el => el[el.tagName === 'LINK' ? 'href' : 'src'] = logo);
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', setLogo, { once: true }) : setLogo();
   if (cache && !new URLSearchParams(location.search).has('preview')) try { localStorage.setItem('mvcd-theme', JSON.stringify(t)); } catch {}
 }
-// Paint the last known theme right away so returning visitors don't see a flash of the default colors
-try { const c = localStorage.getItem('mvcd-theme'); if (c) applyTheme(JSON.parse(c)); } catch {}
 
 // Rich text from the admin: only a few inline tags survive
 export function sanitize(html) {
@@ -117,6 +119,21 @@ export function onPreview(fn) {
     if (e.origin === location.origin && e.data?.type === 'mvcd-preview') { applyTheme(e.data.theme, { cache: false }); fn(e.data.page || {}); }
   });
   parent.postMessage({ type: 'mvcd-ready' }, location.origin);
+
+  // Click-to-edit: outline what the pointer is over, and on click tell the editor what to open.
+  // Cards win over texts inside them; texts win over the section around them.
+  const style = document.createElement('style');
+  style.textContent = '.mv-pick{outline:2px dashed var(--accent)!important;outline-offset:3px;cursor:pointer!important}';
+  document.head.append(style);
+  const target = el => el.closest?.('[data-card]') || el.closest?.('[data-edit]') || el.closest?.('[data-block]');
+  let cur = null;
+  addEventListener('mouseover', e => { const t = target(e.target); if (t === cur) return; cur?.classList.remove('mv-pick'); cur = t; t?.classList.add('mv-pick'); });
+  addEventListener('click', e => {
+    const t = target(e.target);
+    if (!t) return;
+    e.preventDefault(); e.stopPropagation();
+    parent.postMessage({ type: 'mvcd-pick', card: t.dataset.card, text: t.dataset.edit, block: t.dataset.block }, location.origin);
+  }, true);
 }
 
 // Card icons (Tabler-style outline paths), shared by the home page and the admin icon picker
@@ -132,3 +149,6 @@ export const ICONS = {
   calendar: 'M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2zM16 3v4M8 3v4M4 11h16',
   phone: 'M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2',
 };
+
+// Paint the last known theme right away so returning visitors don't see a flash of the default colors
+try { const c = localStorage.getItem('mvcd-theme'); if (c) applyTheme(JSON.parse(c)); } catch {}
