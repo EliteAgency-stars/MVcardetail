@@ -9,11 +9,33 @@
   "background_color": "#070809",
   "theme_color": "#070809",
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/api/icon?s=192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/api/icon?s=512",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/api/icon?s=maskable",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Book a detail", "url": "/booking", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Book a detail",
+      "url": "/booking",
+      "icons": [
+        {
+          "src": "/api/icon?s=192",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }

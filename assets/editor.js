@@ -117,11 +117,16 @@ function themePanel() {
   const logoFile = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async e => {
     const f = e.target.files[0]; if (!f) return;
     status.textContent = 'Uploading logo…';
-    try { th.logo = await uploadImage(f, 'logo', 600); logoImg.src = th.logo; changed(); renderControls(); } catch (err) { alert(err.message); setStatus(); }
+    try {
+      th.logo = await uploadImage(f, 'logo', 600); logoImg.src = th.logo;
+      status.textContent = 'Creating app icons…';
+      th.icons = await makeIcons(th.logo, th.bg);
+      changed(); renderControls();
+    } catch (err) { alert(err.message); setStatus(); }
   } });
   const logo = h('div', { className: 'row' }, logoImg,
     h('label', { className: 'btn small' }, 'Upload new logo', logoFile),
-    th.logo ? btn('Use MV default', () => { th.logo = ''; changed(); renderControls(); }) : null);
+    th.logo ? btn('Use MV default', () => { th.logo = ''; delete th.icons; changed(); renderControls(); }) : null);
   return box('Design (whole website)', h('div', { className: 'ed-text-label', textContent: 'Logo' }), logo, colors,
     h('div', { className: 'grid' }, field('Headline font', fontSel('font_display')), field('Text font', fontSel('font_body'))),
     h('label', { className: 'toggle' }, h('input', { type: 'checkbox', checked: th.upper !== false, onchange: e => { th.upper = e.target.checked; changed(); } }), 'Headlines in CAPITALS'),
@@ -293,9 +298,44 @@ async function uploadImage(file, folder, max = 1600) {
   return sb.storage.from('mvcd-media').getPublicUrl(path).data.publicUrl;
 }
 
+// App icons (home screen) from the logo: square PNGs on the background color.
+// 'maskable' keeps the logo inside Android's safe zone so round/squircle masks never cut it.
+async function makeIcons(logoUrl, bg = '#000000') {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  // load event, not img.decode(): decode() can stall while the tab isn't painting
+  await new Promise((ok, fail) => { img.onload = ok; img.onerror = () => fail(new Error('Could not load the logo image')); img.src = logoUrl; });
+  // Fill with the logo's own corner color (so a logo on black gets a seamless black icon); transparent corners use the site background
+  const probe = Object.assign(document.createElement('canvas'), { width: 1, height: 1 }).getContext('2d', { willReadFrequently: true });
+  probe.drawImage(img, 0, 0, 4, 4, 0, 0, 1, 1);
+  const [r, g, b2, a] = probe.getImageData(0, 0, 1, 1).data;
+  if (a > 200) bg = '#' + [r, g, b2].map(v => v.toString(16).padStart(2, '0')).join('');
+  const stamp = Date.now(), out = {};
+  for (const [key, size, fill] of [['192', 192, .92], ['512', 512, .92], ['maskable', 512, .72], ['180', 180, .92]]) {
+    const cv = Object.assign(document.createElement('canvas'), { width: size, height: size });
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = /^#[0-9a-f]{6}$/i.test(bg) ? bg : '#000000';
+    ctx.fillRect(0, 0, size, size);
+    const k = Math.min(size * fill / img.naturalWidth, size * fill / img.naturalHeight);
+    const w = img.naturalWidth * k, h2 = img.naturalHeight * k;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, (size - w) / 2, (size - h2) / 2, w, h2);
+    const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    const path = `icons/${stamp}-${key}.png`;
+    const { error } = await sb.storage.from('mvcd-media').upload(path, blob, { contentType: 'image/png' });
+    if (error) throw error;
+    out[key] = sb.storage.from('mvcd-media').getPublicUrl(path).data.publicUrl;
+  }
+  return out;
+}
+
 // ---------- Save / discard ----------
 $('ed-save').onclick = async () => {
   const b = $('ed-save'); b.disabled = true;
+  if (draft.theme.logo && !draft.theme.icons) {
+    status.textContent = 'Creating app icons…';
+    try { draft.theme.icons = await makeIcons(draft.theme.logo, draft.theme.bg); } catch (err) { b.disabled = false; return alert(`App icons: ${err.message}`); }
+  }
   const { error } = await sb.from('mvcd_settings').upsert([
     { key: 'theme', value: draft.theme }, { key: 'page_home', value: draft.pages.home }, { key: 'page_booking', value: draft.pages.booking }]);
   let err = error;
