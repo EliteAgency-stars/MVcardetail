@@ -26,9 +26,6 @@
   .hero h1 em { font-style: normal; color: var(--accent); }
   .hero p.lead { font-size: clamp(17px, 2vw, 20px); max-width: 560px; color: #d5d9dd; margin: 0 0 30px; }
   .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 36px; font-size: 14px; color: #c3c8cd; }
-  .chips span { display: inline-flex; align-items: center; gap: 8px; }
-  .chips span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
   section { padding: clamp(72px, 10vw, 128px) 0; }
   .head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 760px; }
@@ -55,28 +52,28 @@
   .tier .lvl { display: flex; gap: 4px; margin-bottom: 18px; }
   .tier .lvl i { height: 4px; flex: 1; border-radius: 4px; background: var(--line); }
   .tier .lvl i.on { background: var(--accent); }
-  .tier h3 { font-family: var(--display); font-size: 22px; margin: 0 0 6px; line-height: 1.1; }
-  .tier .tagline { font-size: 14px; color: var(--muted); margin: 0 0 18px; min-height: 66px; }
+  .tier h3 { font-family: var(--display); font-size: 22px; margin: 0 0 16px; line-height: 1.1; }
   .tier .price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   .tier .price small { color: var(--muted); font-size: 13px; }
   .tier .price b { font-family: var(--display); font-size: 46px; line-height: 1; }
   .tier .price s { color: var(--muted); font-size: 18px; }
   .tier .time { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
-  .tier ul { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 8px; font-size: 14px; flex: 1; align-content: start; }
+  .tier ul { list-style: none; padding: 0; display: grid; gap: 8px; }
   .tier li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; color: #d7dbdf; }
   .tier li svg { width: 16px; height: 16px; color: var(--accent); margin-top: 3px; }
-  .tier li.more { color: var(--muted); grid-template-columns: 1fr; }
+  .tier .inc { flex: 1; margin-bottom: 20px; font-size: 14px; }
+  .tier .inc summary { cursor: pointer; color: var(--muted); width: max-content; }
+  .tier .inc summary:hover { color: var(--text); }
+  .tier .inc ul { margin: 12px 0 0; }
   .tier .btn { width: 100%; }
   .tier.popular { border-color: rgba(46,230,214,.5); box-shadow: 0 30px 60px -30px rgba(46,230,214,.35); }
   .tier.deal { border-color: rgba(255,176,32,.55); background: linear-gradient(180deg, rgba(255,176,32,.08), transparent 40%), var(--surface); }
   .tier.deal .price b { color: var(--offer); }
   .ribbon { position: absolute; top: -12px; left: 22px; padding: 5px 12px; border-radius: 999px; font: 700 11px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); }
   .deal .ribbon { background: var(--offer); color: #241600; }
-  .upgrade { margin-top: 22px; padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
-  .upgrade b { font-family: var(--display); font-size: 20px; }
-  .upgrade ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
-  .upgrade li { padding: 6px 12px; border-radius: 999px; background: var(--surface-2); font-size: 13px; }
   .fine { margin-top: 18px; font-size: 13px; color: var(--muted); max-width: 820px; }
+  .fine summary { cursor: pointer; width: max-content; }
+  .fine p { margin: 8px 0 0; }
 
   /* Trust strip */
   .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
@@ -145,61 +142,53 @@
   <section class="hero" style="padding:0">
     <div class="hero-bg"><img id="hero-img" src="/img/setmore-1.webp" alt="MV Car Detail van next to a freshly detailed aircraft" fetchpriority="high"></div>
     <div class="wrap">
-      <span class="eyebrow">Mobile detailing · Since 2018</span>
+      <span class="eyebrow">Mobile detailing since 2018</span>
       <h1 class="display">Showroom shine, <em>delivered.</em></h1>
-      <p class="lead">Professional inside & outside detailing at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte. Meguiar's certified. We bring the water, power and products.</p>
+      <p class="lead">We come to your home, office, marina or hangar in Miami, Broward and Charlotte.</p>
       <div class="ctas">
         <a class="btn primary" href="/booking">Book from <span id="from-price">$35</span></a>
-        <a class="btn wa" id="hero-wa" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>Fast quote on WhatsApp</a>
+        <a class="btn wa" id="hero-wa" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
       </div>
-      <div class="chips"><span>Meguiar's certified</span><span>We come to you</span><span>Price confirmed before we start</span><span>Debit & credit accepted</span></div>
     </div>
   </section>
 
   <div class="trust">
-    <div><b>2018</b><span>Detailing cars, boats & aircraft since</span></div>
-    <div><b>0 min</b><span>Spent in a waiting room. We come to you</span></div>
-    <div><b>5 levels</b><span>From a quick wash to premium care</span></div>
-    <div><b>Upfront</b><span>Any adjustment confirmed before work begins</span></div>
+    <div><b>Since 2018</b><span>Cars, boats & aircraft</span></div>
+    <div><b>We come to you</b><span>Water & power included</span></div>
+    <div><b>Meguiar's</b><span>Certified products</span></div>
+    <div><b>Card on site</b><span>Debit & credit</span></div>
   </div>
 
   <section id="pricing">
     <div class="wrap">
-      <div class="head reveal">
-        <span class="eyebrow">Pricing</span>
-        <h2 class="display">Pick your level of clean.</h2>
-        <p>Transparent starting prices for sedans & coupes. Larger vehicles or heavy soiling? We confirm the final price with you before we start, never after.</p>
-      </div>
+      <div class="head reveal"><h2 class="display">Pick your level of clean.</h2></div>
       <div id="offer"></div>
       <div class="tiers" id="tiers"></div>
-      <div id="upgrade"></div>
-      <p class="fine">Prices are based on standard-size sedans and coupes in average condition. Additional charges may apply depending on vehicle size, condition, pet hair, stains or excessive dirt. Any price adjustment will be confirmed before service begins. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately. <a href="#" class="wa-link">ask us on WhatsApp</a>.</p>
+      <details class="fine">
+        <summary>Pricing notes</summary>
+        <p>Prices are for standard sedans and coupes in average condition. Size, pet hair, stains or heavy dirt can change the price, always confirmed with you before we start. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately: <a href="#" class="wa-link">ask on WhatsApp</a>.</p>
+      </details>
     </div>
   </section>
 
   <section id="work" style="padding-top:0">
-    <div class="wrap head reveal">
-      <span class="eyebrow">Our work</span>
-      <h2 class="display">Driveways, hangars, marinas.</h2>
-      <p>Everyday drivers to exotics and aircraft, same obsessive process every time.</p>
-    </div>
+    <div class="wrap head reveal"><h2 class="display">Driveways, hangars, marinas.</h2></div>
     <div class="marquee" id="gallery"></div>
   </section>
 
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="head reveal"><span class="eyebrow">How it works</span><h2 class="display">Clean car. Zero hassle.</h2></div>
       <div class="steps">
-        <div class="card reveal"><h3>Book in 60 seconds</h3><p>Choose your package and a live time slot. You get a calendar invite instantly.</p></div>
-        <div class="card reveal"><h3>We pull up, fully equipped</h3><p>Our mobile unit brings its own water, power and pro-grade Meguiar's products.</p></div>
-        <div class="card reveal"><h3>Inspect, then pay</h3><p>Walk around your car with us and pay by debit or credit card when you're happy.</p></div>
+        <div class="card reveal"><h3>Book online</h3><p>Live time slots.</p></div>
+        <div class="card reveal"><h3>We pull up</h3><p>Fully equipped.</p></div>
+        <div class="card reveal"><h3>Inspect, then pay</h3><p>Card on site.</p></div>
       </div>
     </div>
   </section>
 
   <section id="reviews" hidden style="padding-top:0">
     <div class="wrap">
-      <div class="head reveal"><span class="eyebrow">Reviews</span><h2 class="display">Our clients say it best.</h2></div>
+      <div class="head reveal"><h2 class="display">What clients say.</h2></div>
       <div class="quotes" id="quotes"></div>
     </div>
   </section>
@@ -275,8 +264,8 @@ const offerSvc = offer?.active && services.find(s => s.slug === offer.service);
 if (offerSvc) {
   document.getElementById('offer').innerHTML = `
     <div class="offer reveal">
-      <div><span class="eyebrow tag">First-time client offer · code ${esc(offer.code)}</span>
-        <h3>${esc(offer.headline)}</h3><p>${esc(offer.detail)}</p></div>
+      <div><span class="eyebrow tag">First visit · code ${esc(offer.code)}</span>
+        <h3>${esc(offer.headline)}</h3></div>
       <div class="prices"><div class="was">${money(offerSvc.price)}</div><div class="now">${money(offer.price)}</div>
         <a class="btn" href="/booking?service=${offerSvc.slug}&offer=1">Claim ${esc(offerSvc.name)}</a></div>
     </div>`;
@@ -286,30 +275,16 @@ if (offerSvc) {
 const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
 document.getElementById('tiers').innerHTML = services.map(s => {
   const o = offerFor(offer, s.slug);
-  const shown = s.includes.slice(0, 6), more = s.includes.length - shown.length;
   return `<article class="card tier reveal ${s.popular ? 'popular' : ''} ${o ? 'deal' : ''}">
     ${o ? '<span class="ribbon">Best value</span>' : s.popular ? '<span class="ribbon">Most popular</span>' : ''}
     <div class="lvl">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= s.level ? 'on' : ''}"></i>`).join('')}</div>
     <h3>${esc(s.name)}</h3>
-    <p class="tagline">${esc(s.tagline)}</p>
     <div class="price"><small>from</small><b>${money(o ? o.price : s.price)}</b>${o ? `<s>${money(s.price)}</s>` : ''}</div>
-    <div class="time">${dur(s.duration_min)} · sedan / coupe${o ? ' · first booking' : ''}</div>
-    <ul>${shown.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join('')}${more > 0 ? `<li class="more">+ ${more} more</li>` : ''}</ul>
+    <div class="time">${dur(s.duration_min)}${o ? ' · first visit' : ''}</div>
+    <details class="inc"><summary>What's included</summary><ul>${s.includes.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join('')}</ul></details>
     <a class="btn ${s.popular || o ? 'primary' : ''}" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}">Book ${esc(s.name)}</a>
   </article>`;
 }).join('');
-
-// "Premium vs Full" upgrade nudge: what the offered tier adds over the popular one
-const pop = services.find(s => s.popular);
-if (offerSvc && pop && pop !== offerSvc) {
-  const norm = x => x.toLowerCase().replace(/^(thorough|detailed|deep|enhanced)\s+/, '');
-  const base = new Set(pop.includes.map(norm));
-  const extra = offerSvc.includes.filter(i => !base.has(norm(i)));
-  const diff = offer.price - pop.price;
-  if (extra.length) document.getElementById('upgrade').innerHTML = `
-    <div class="card upgrade reveal"><b>${esc(offerSvc.name)} vs ${esc(pop.name)}: ${diff <= 0 ? 'same price' : '+' + money(diff)} on your first visit</b>
-    <ul>${extra.map(i => `<li>+ ${esc(i)}</li>`).join('')}</ul></div>`;
-}
 
 // Gallery marquee (two rows, duplicated for a seamless loop)
 const gal = photos.filter(p => p.section === 'gallery');

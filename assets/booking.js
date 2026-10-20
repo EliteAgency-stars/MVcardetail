@@ -24,8 +24,8 @@ $('pkgs').innerHTML = services.map(s => {
   const o = offerFor(offer, s.slug);
   return `<label class="pkg"><input type="radio" name="service" value="${s.slug}">
     <b>${esc(s.name)}${o ? '<span class="tag deal">Offer</span>' : s.popular ? '<span class="tag">Popular</span>' : ''}</b>
-    <span class="p">${o ? `<s>${money(s.price)}</s>${money(o.price)}*` : money(s.price)}</span>
-    <small>${dur(s.duration_min)} · ${esc(s.tagline)}</small></label>`;
+    <span class="p">${o ? `<s>${money(s.price)}</s>${money(o.price)}` : money(s.price)}</span>
+    <small>${dur(s.duration_min)}</small></label>`;
 }).join('');
 
 function pickService(slug) {
@@ -35,10 +35,10 @@ function pickService(slug) {
   form.querySelector(`input[name=service][value="${s.slug}"]`).checked = true;
   $('lvlname').textContent = s.name;
   [...$('lvlbar').children].forEach((el, i) => el.classList.toggle('on', i < s.level));
-  $('pkgdetail').innerHTML = `<b style="color:var(--text)">Includes</b><ul>${s.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul><p style="margin:8px 0 0">${esc(s.note)}</p>`;
+  $('pkgdetail').innerHTML = `<details><summary>What's included</summary><ul>${s.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul></details>`;
   const o = offerFor(offer, s.slug);
   $('firstbox').hidden = !o;
-  if (o) $('firsttext').innerHTML = `<b>This is my first detail with MV</b>: apply code ${esc(o.code)}: ${esc(s.name)} for <b>${money(o.price)}</b> instead of ${money(s.price)}.`;
+  if (o) $('firsttext').innerHTML = `<b>First visit?</b> Pay ${money(o.price)} instead of ${money(s.price)}`;
   car?.setLevel(s.level);
   renderDays(); renderTimes(); summary();
 }
