@@ -273,3 +273,13 @@ update public.mvcd_settings set value = '{"rating": 4.9, "count": 46, "url": "ht
 alter table public.mvcd_services add column if not exists price_suv numeric(8,2);
 alter table public.mvcd_services add column if not exists price_truck numeric(8,2);
 alter table public.mvcd_bookings add column if not exists vehicle_size text not null default 'sedan' check (vehicle_size in ('sedan','suv','truck'));
+
+-- Push notifications (applied as migration mvcd_push_notifications):
+--   mvcd_push_subs (device subscriptions, linked to bookings), mvcd_push_sent (once per booking+kind),
+--   mvcd_push_messages (admin broadcasts), mvcd_private (VAPID keys + cron secret, service_role only),
+--   mvcd_push_subscribe(p_sub jsonb, p_booking uuid) for the site.
+-- Edge function: supabase/functions/mvcd-push (verify_jwt off; each action authenticates itself).
+-- Cron: select cron.schedule('mvcd-push-reminders', '*/10 * * * *', $$ select net.http_post(
+--   url := 'https://opagblruzwsrxsggkjsa.supabase.co/functions/v1/mvcd-push',
+--   headers := jsonb_build_object('Content-Type','application/json','x-cron-secret',(select value from public.mvcd_private where key='cron_secret')),
+--   body := '{"action":"reminders"}'::jsonb); $$);

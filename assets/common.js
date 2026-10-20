@@ -110,3 +110,22 @@ export const PHONE_EN = '+1 786 568 6564';
 export const PHONE_ES = '+1 954 268 7993';
 
 export const offerFor =(offer, slug) => offer && offer.active && offer.service === slug ? offer : null;
+
+// ---------- Push notifications (installed app on iPhone; browser or app on Android/desktop) ----------
+const VAPID_PUBLIC = 'BCegWpcmmlp7Mq9Wj-RwOVWCIdMFgGik3STYDmJtHhzWn7psVHbmQgip8tK4m1-GjaxkCmxzq9dVOer-Cxt6JAg';
+export const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+if ('serviceWorker' in navigator && !new URLSearchParams(location.search).has('preview')) navigator.serviceWorker.register('/sw.js').catch(() => {});
+const b64 = s => Uint8Array.from(atob((s + '='.repeat((4 - s.length % 4) % 4)).replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+// Must be called from a tap/click (iPhone only shows the permission prompt then). Returns 'granted' | 'denied' | 'default' | 'unsupported'.
+export async function enablePush(bookingId = null) {
+  if (!pushSupported()) return 'unsupported';
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') return perm;
+  const reg = await navigator.serviceWorker.register('/sw.js');
+  await navigator.serviceWorker.ready;
+  const sub = await reg.pushManager.getSubscription() || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(VAPID_PUBLIC) });
+  const { error } = await sb.rpc('mvcd_push_subscribe', { p_sub: sub.toJSON(), p_booking: bookingId });
+  if (error) throw error;
+  if (bookingId) await sb.functions.invoke('mvcd-push', { body: { action: 'confirm', booking_id: bookingId } }).catch(() => {});
+  return 'granted';
+}

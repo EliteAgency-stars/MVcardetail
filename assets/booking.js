@@ -1,5 +1,5 @@
 import { applyPage, onPreview } from '/assets/site.js';
-import { sb, shineText, loadContent, money, dur, wa, esc, icons, offerFor, SIZES, sizeLabel, priceFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
+import { sb, shineText, pushSupported, enablePush, loadContent, money, dur, wa, esc, icons, offerFor, SIZES, sizeLabel, priceFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
 
 const $ = id => document.getElementById(id);
 const form = $('form');
@@ -243,10 +243,18 @@ function showConfirmed(id, f, { service: s, size, start, price: paid }) {
   const ok = $('ok'), remind = $('remind');
   // Spotlight the reminder button once the check animation lands
   setTimeout(() => { ok.classList.add('focus'); remind.focus({ preventScroll: true }); remind.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 1600);
-  remind.onclick = () => {
-    if (apple) location.href = ics; else window.open(gcal, '_blank', 'noopener');
+  // Notifications first (confirmation now, reminders 24 h and 2 h before); calendar when the phone can't do push
+  remind.onclick = async () => {
+    remind.disabled = true;
+    let push = 'unsupported';
+    try { if (pushSupported()) push = await enablePush(id); } catch { push = 'error'; }
+    if (push !== 'granted') {
+      if (apple) location.href = ics; else window.open(gcal, '_blank', 'noopener');
+      if (push === 'unsupported' && apple) $('pushhint').hidden = false;
+    }
+    remind.disabled = false;
     remind.classList.remove('spot'); remind.classList.add('on');
-    $('remindtxt').textContent = 'Reminder on ✓';
+    $('remindtxt').textContent = push === 'granted' ? 'Notifications on ✓' : 'Reminder on ✓';
     ok.classList.add('seen');
   };
   setTimeout(() => ok.classList.add('seen'), 7000);

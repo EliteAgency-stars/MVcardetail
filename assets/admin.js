@@ -8,7 +8,7 @@ async function boot() {
   const { data: { session } } = await sb.auth.getSession();
   $('login').hidden = !!session;
   $('app').hidden = !session;
-  if (session) { loadBookings(); loadServices(); loadOffer(); loadPhotos(); loadTestimonials(); loadGoogle(); }
+  if (session) { loadBookings(); loadServices(); loadOffer(); loadPhotos(); loadTestimonials(); loadGoogle(); loadPush(); }
 }
 $('loginform').onsubmit = async e => {
   e.preventDefault();
@@ -225,3 +225,26 @@ $('tlist').onclick = async e => {
 };
 
 boot();
+
+// ---------- Notifications ----------
+async function loadPush() {
+  const [{ count }, { data: sent }] = await Promise.all([
+    sb.from('mvcd_push_subs').select('id', { count: 'exact', head: true }),
+    sb.from('mvcd_push_messages').select('*').order('created_at', { ascending: false }).limit(30),
+  ]);
+  $('pushcount').textContent = `${count ?? 0} device${count === 1 ? '' : 's'} with notifications on`;
+  $('pushlist').innerHTML = (sent || []).map(m => `<article class="card bk"><div><b>${esc(m.title)}</b><br><span class="meta">${esc(m.body)}</span></div>
+    <span class="meta">${new Date(m.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}<br>${m.sent} delivered${m.failed ? ` · ${m.failed} failed` : ''}</span></article>`).join('') || '<p class="muted">Nothing sent yet.</p>';
+}
+$('pushform').onsubmit = async e => {
+  e.preventDefault();
+  const f = e.target, d = Object.fromEntries(new FormData(f)), btn = f.querySelector('button');
+  if (!confirm(`Send "${d.title}" to everyone with notifications on?`)) return;
+  btn.disabled = true; $('pushsaved').textContent = 'Sending…'; $('pushsaved').classList.add('on');
+  const { data: { session } } = await sb.auth.getSession();
+  const { data, error } = await sb.functions.invoke('mvcd-push', { body: { action: 'broadcast', ...d }, headers: { Authorization: `Bearer ${session?.access_token}` } });
+  btn.disabled = false;
+  $('pushsaved').textContent = error || data?.error ? `Error: ${data?.error || error.message}` : `Sent ✓ ${data.delivered} delivered`;
+  if (!error && !data?.error) f.reset();
+  loadPush();
+};

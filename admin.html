@@ -108,6 +108,7 @@
       <button role="tab" data-tab="photos">Photos</button>
       <button role="tab" data-tab="testimonials">Testimonials</button>
       <button role="tab" data-tab="editor">Site editor</button>
+      <button role="tab" data-tab="push">Notifications</button>
     </div>
 
     <section class="panel" data-panel="bookings">
@@ -163,6 +164,21 @@
       </form>
       <div id="tlist" class="panel" style="padding:0"></div>
     </section>
+    <section class="panel" data-panel="push" hidden>
+      <h2>Notifications</h2>
+      <p class="muted" style="margin:0">People who turned on notifications get booking confirmations and reminders (24 h and 2 h before) automatically. Here you can send a message to all of them. On iPhone this works when the site is added to the Home Screen.</p>
+      <div class="card box"><b id="pushcount">Loading…</b></div>
+      <form class="card box" id="pushform">
+        <label class="field">Title<input type="text" name="title" maxlength="80" required placeholder="Weekend special"></label>
+        <label class="field">Message<textarea name="body" rows="3" maxlength="240" required placeholder="Full Detail $20 off this Saturday only. Book now!"></textarea></label>
+        <label class="field">When they tap it, open
+          <select name="url"><option value="/booking">Booking page</option><option value="/">Home page</option><option value="https://wa.me/19542687993">WhatsApp chat</option><option value="/moreinfo">More info</option></select></label>
+        <div class="row"><button class="btn primary" type="submit">Send to everyone</button><span class="saved" id="pushsaved"></span></div>
+      </form>
+      <h2 style="font-size:18px">Sent</h2>
+      <div id="pushlist" class="panel" style="padding:0"></div>
+    </section>
+
     <section class="panel ed" data-panel="editor" hidden>
       <div class="ed-bar">
         <div class="ed-seg" id="ed-page"><button type="button" data-page="home" aria-pressed="true">Home page</button><button type="button" data-page="booking" aria-pressed="false">Booking</button></div>

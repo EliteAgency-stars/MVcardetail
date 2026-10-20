@@ -140,7 +140,7 @@
 <a class="fab-wa wa-link" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span data-icon="wa"></span></a>
 
 <script type="module">
-import { loadContent, money, dur, wa, esc, icons, shineText, offerFor } from '/assets/common.js';
+import { loadContent, money, dur, wa, esc, icons, shineText, offerFor, pushSupported, enablePush } from '/assets/common.js';
 import { applyPage, onPreview, safeUrl, ICONS } from '/assets/site.js';
 
 // Background video: skip for reduced motion / data saver, otherwise play muted inline (iOS + Android)
@@ -234,7 +234,14 @@ const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform 
 const touch = matchMedia('(pointer: coarse)').matches;
 const preview = new URLSearchParams(location.search).has('preview');
 let deferred = null;
-if (standalone && !preview) appBox.remove(); // already installed: nothing to offer
+const askPush = standalone && !preview && pushSupported() && Notification.permission === 'default';
+if (askPush) {
+  // Inside the installed app: offer notifications instead of the install pitch
+  appBox.querySelector('h2').textContent = 'Turn on notifications';
+  appBox.querySelector('p').textContent = 'Get booking reminders and special offers from MV Car Detail.';
+  installBtn.querySelector('span').textContent = 'Turn on';
+  installBtn.hidden = false;
+} else if (standalone && !preview) appBox.remove(); // installed and already decided: nothing to offer
 else {
   if (touch) installBtn.hidden = false; // iPhone / Android: install or show how
   else {
@@ -266,6 +273,7 @@ function guide() {
 }
 installBtn.onclick = async () => {
   if (preview) return;
+  if (askPush) { const r = await enablePush().catch(() => 'error'); if (r === 'granted' || r === 'denied') appBox.remove(); return; }
   if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; return; }
   guide();
 };
