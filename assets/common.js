@@ -49,7 +49,7 @@ export async function loadContent() {
     sb.from('mvcd_testimonials').select('*').eq('published', true).order('created_at', { ascending: false }),
   ]);
   const cfg = Object.fromEntries((settings.data || []).map(r => [r.key, r.value]));
-  return { services: services.data || [], offer: cfg.offer, photos: photos.data || [], testimonials: testimonials.data || [] };
+  return { services: services.data || [], offer: cfg.offer, google: cfg.google, photos: photos.data || [], testimonials: testimonials.data || [] };
 }
 
 const I = {

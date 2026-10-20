@@ -78,7 +78,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
 
 /* Shine: a glint of light travels word by word, like a reflection on fresh paint */
 .w { display: inline-block; --base: #d2d7db; background: linear-gradient(110deg, var(--base) 38%, #ffffff 46%, #e6fffc 50%, #ffffff 54%, var(--base) 62%); background-size: 300% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: .06em; }
-em .w, .w.accent { --base: var(--accent); }
+em .w, .accent .w { --base: var(--accent); }
 .hero .w { animation: rise .9s cubic-bezier(.2,.8,.2,1) both, glint 7s ease-in-out infinite; animation-delay: calc(var(--i) * .1s), calc(1.3s + var(--i) * .16s); }
 .reveal.in .w, .w.once { animation: glint 1.8s ease-in-out both; animation-delay: calc(.35s + var(--i) * .12s); }
 @keyframes rise { from { opacity: 0; transform: translateY(.45em); filter: blur(8px); } }

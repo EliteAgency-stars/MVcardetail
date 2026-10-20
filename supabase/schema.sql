@@ -255,3 +255,8 @@ begin
 end $$;
 revoke all on function public.mvcd_sync_gcal from public, anon, authenticated;
 grant execute on function public.mvcd_sync_gcal to service_role;
+
+-- Google rating shown on the landing (editable in admin → Testimonials)
+insert into public.mvcd_settings (key, value) values
+('google', '{"rating": 5.0, "count": 17, "url": "https://maps.app.goo.gl/Kv2w4gDw9cT3go1c7"}')
+on conflict (key) do nothing;

@@ -8,7 +8,7 @@ async function boot() {
   const { data: { session } } = await sb.auth.getSession();
   $('login').hidden = !!session;
   $('app').hidden = !session;
-  if (session) { loadBookings(); loadServices(); loadOffer(); loadPhotos(); loadTestimonials(); }
+  if (session) { loadBookings(); loadServices(); loadOffer(); loadPhotos(); loadTestimonials(); loadGoogle(); }
 }
 $('loginform').onsubmit = async e => {
   e.preventDefault();
@@ -172,6 +172,21 @@ const drop = $('drop');
 drop.ondragover = e => { e.preventDefault(); drop.classList.add('over'); };
 drop.ondragleave = () => drop.classList.remove('over');
 drop.ondrop = e => { e.preventDefault(); drop.classList.remove('over'); addPhotos(e.dataTransfer.files); };
+
+// ---------- Google rating ----------
+async function loadGoogle() {
+  const { data } = await sb.from('mvcd_settings').select('value').eq('key', 'google').maybeSingle();
+  const g = data?.value || {}, f = $('gform');
+  ['rating', 'count', 'url'].forEach(k => f[k].value = g[k] ?? '');
+}
+$('gform').onsubmit = async e => {
+  e.preventDefault();
+  const f = e.target;
+  const value = { rating: +f.rating.value, count: +f.count.value, url: f.url.value.trim() };
+  const { error } = await sb.from('mvcd_settings').upsert({ key: 'google', value });
+  if (error) return alert(error.message);
+  flash(f.querySelector('.saved'));
+};
 
 // ---------- Testimonials ----------
 async function loadTestimonials() {

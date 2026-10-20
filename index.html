@@ -124,16 +124,21 @@
   .areas span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; }
   @media (max-width: 860px) { .visit { grid-template-columns: 1fr; } }
 
-  .cta-band { text-align: center; }
-  .cta-band h2 { font-size: clamp(40px, 7vw, 92px); margin: 0 0 26px; }
-  .cta-band .ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .cta-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: radial-gradient(120% 160% at 100% 0%, rgba(46,230,214,.12), transparent 55%), var(--surface); }
+  .cta-band h2 { font-size: clamp(30px, 3.8vw, 50px); margin: 0; }
+  .cta-band .ctas { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
+  .gbar { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }
+  .quotes:not(:empty) { margin-top: 28px; }
+  .gbar h2 { font-size: clamp(32px, 4.6vw, 58px); margin: 0; flex: 1 1 360px; }
+  .gscore { display: grid; gap: 2px; font-size: 14px; color: var(--muted); }
+  .gscore .stars { color: var(--offer); font-size: 22px; letter-spacing: 3px; }
 </style>
 </head>
 <body>
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="/" aria-label="MV Car Detail home"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="46" height="46"></a>
-    <nav><a href="#pricing">Pricing</a><a href="#work">Our work</a><a href="#reviews" id="nav-reviews" hidden>Reviews</a><a href="#visit">Hours & areas</a></nav>
+    <nav><a href="#work">Our work</a><a href="#pricing">Pricing</a><a href="#reviews">Reviews</a><a href="#visit">Hours & areas</a></nav>
     <a class="btn primary small" href="/booking">Book now</a>
   </div>
 </header>
@@ -159,7 +164,12 @@
     <div><b>Card on site</b><span>Debit & credit</span></div>
   </div>
 
-  <section id="pricing">
+  <section id="work">
+    <div class="wrap head reveal"><h2 class="display">Driveways, hangars, marinas.</h2></div>
+    <div class="marquee" id="gallery"></div>
+  </section>
+
+  <section id="pricing" style="padding-top:0">
     <div class="wrap">
       <div class="head reveal"><h2 class="display">Pick your level of clean.</h2></div>
       <div id="offer"></div>
@@ -169,11 +179,6 @@
         <p>Prices are for standard sedans and coupes in average condition. Size, pet hair, stains or heavy dirt can change the price, always confirmed with you before we start. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately: <a href="#" class="wa-link">ask on WhatsApp</a>.</p>
       </details>
     </div>
-  </section>
-
-  <section id="work" style="padding-top:0">
-    <div class="wrap head reveal"><h2 class="display">Driveways, hangars, marinas.</h2></div>
-    <div class="marquee" id="gallery"></div>
   </section>
 
   <section style="padding-top:0">
@@ -186,9 +191,16 @@
     </div>
   </section>
 
-  <section id="reviews" hidden style="padding-top:0">
+  <section id="reviews" style="padding-top:0">
     <div class="wrap">
-      <div class="head reveal"><h2 class="display">What clients say.</h2></div>
+      <div class="gbar reveal">
+        <h2 class="display">Rated <span class="accent">5.0</span> on Google.</h2>
+        <div class="gscore">
+          <div class="stars" aria-hidden="true">★★★★★</div>
+          <span id="g-count">17 reviews</span>
+        </div>
+        <a class="btn" id="g-link" href="https://maps.app.goo.gl/Kv2w4gDw9cT3go1c7" target="_blank" rel="noopener">Read them on Google</a>
+      </div>
       <div class="quotes" id="quotes"></div>
     </div>
   </section>
@@ -254,7 +266,13 @@ icons();
 shineText();
 reveal();
 
-const { services, offer, photos, testimonials } = await loadContent();
+const { services, offer, google, photos, testimonials } = await loadContent();
+if (google) {
+  const r = document.querySelector('#reviews .accent .w') || document.querySelector('#reviews .accent');
+  if (google.rating && r) r.textContent = Number(google.rating).toFixed(1);
+  if (google.count) document.getElementById('g-count').textContent = `${google.count} reviews`;
+  if (google.url) document.getElementById('g-link').href = google.url;
+}
 
 if (services.length) document.getElementById('from-price').textContent = money(Math.min(...services.map(s => s.price)));
 const hero = photos.find(p => p.section === 'hero');
@@ -296,8 +314,6 @@ document.getElementById('gallery').innerHTML = row(gal.slice(0, half)) + row(gal
 
 // Testimonials
 if (testimonials.length) {
-  document.getElementById('reviews').hidden = false;
-  document.getElementById('nav-reviews').hidden = false;
   document.getElementById('quotes').innerHTML = testimonials.map(q => `<figure class="card quote reveal" style="margin:0">
     <div class="stars">${'★'.repeat(q.rating)}${'☆'.repeat(5 - q.rating)}</div>
     <p>“${esc(q.text)}”</p>
