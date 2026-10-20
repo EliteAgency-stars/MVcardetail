@@ -45,6 +45,41 @@
   .tm { padding: 16px 18px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
   .tm img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
   .btn.danger { color: var(--danger); }
+
+  /* Site editor */
+  .panel.ed { width: min(1500px, 100vw - 32px); margin-left: 50%; transform: translateX(-50%); }
+  .ed-bar { position: sticky; top: 130px; z-index: 6; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 0; background: var(--bg); }
+  .ed-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .ed-seg button { padding: 8px 14px; border: 0; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; }
+  .ed-seg button[aria-pressed=true] { background: var(--accent); color: var(--accent-ink); }
+  .ed-status { margin-left: auto; font-size: 13px; color: var(--muted); }
+  .ed-grid { display: grid; grid-template-columns: minmax(320px, 440px) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .ed-controls { display: grid; gap: 14px; }
+  .ed-preview { position: sticky; top: 190px; }
+  .ed-frame { height: calc(100vh - 210px); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: #000; margin: 0 auto; transition: width .3s; width: 390px; max-width: 100%; }
+  .ed-frame.desktop { width: 100%; }
+  .ed-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+  @media (max-width: 900px) { .ed-grid { grid-template-columns: 1fr; } .ed-preview { position: static; } .ed-frame { height: 70vh; } .ed-bar { top: 120px; } }
+  .ed-box { padding: 18px; display: grid; gap: 12px; }
+  .ed-box > h3 { margin: 0; font-size: 16px; }
+  .ed-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); font-size: 14px; }
+  .ed-row.off { opacity: .5; }
+  .ed-row .acts { display: flex; gap: 4px; }
+  .ed-row .acts button { min-width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; padding: 0 8px; }
+  .ed-sub { grid-column: 1 / -1; display: grid; gap: 10px; padding-top: 8px; }
+  .ed-colors { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .ed-colors label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .ed-colors input[type=color] { width: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: none; cursor: pointer; }
+  .rt { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface-2); }
+  .rt-bar { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; border-bottom: 1px solid var(--line); }
+  .rt-bar button { min-width: 32px; height: 30px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13px; padding: 0 8px; }
+  .rt-box { min-height: 44px; padding: 10px 12px; outline: none; font-size: 15px; }
+  .rt-box .accent { color: var(--accent); }
+  .rt-box a { color: var(--accent); }
+  .ed-text-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+  .ed-text-label button { border: 0; background: none; color: var(--accent); cursor: pointer; font-size: 12px; }
+  .ed-btnrow { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 6px; }
+  .ed-btnrow input, .ed-btnrow select { min-height: 40px; padding: 8px 10px; font-size: 14px; }
 </style>
 </head>
 <body>
@@ -72,6 +107,7 @@
       <button role="tab" data-tab="offer">Offer</button>
       <button role="tab" data-tab="photos">Photos</button>
       <button role="tab" data-tab="testimonials">Testimonials</button>
+      <button role="tab" data-tab="editor">Site editor</button>
     </div>
 
     <section class="panel" data-panel="bookings">
@@ -127,9 +163,23 @@
       </form>
       <div id="tlist" class="panel" style="padding:0"></div>
     </section>
+    <section class="panel ed" data-panel="editor" hidden>
+      <div class="ed-bar">
+        <div class="ed-seg" id="ed-page"><button type="button" data-page="home" aria-pressed="true">Home page</button><button type="button" data-page="booking" aria-pressed="false">Booking</button></div>
+        <div class="ed-seg" id="ed-device"><button type="button" data-device="phone" aria-pressed="true">Phone</button><button type="button" data-device="desktop" aria-pressed="false">Desktop</button></div>
+        <span class="ed-status" id="ed-status"></span>
+        <button class="btn small" type="button" id="ed-discard">Discard changes</button>
+        <button class="btn primary small" type="button" id="ed-save">Save &amp; publish</button>
+      </div>
+      <div class="ed-grid">
+        <div class="ed-controls" id="ed-controls"><p class="muted">Loading editor…</p></div>
+        <div class="ed-preview"><div class="ed-frame" id="ed-frame-wrap"><iframe id="ed-frame" title="Live preview"></iframe></div></div>
+      </div>
+    </section>
   </main>
 </div>
 
 <script type="module" src="/assets/admin.js"></script>
+<script type="module" src="/assets/editor.js"></script>
 </body>
 </html>

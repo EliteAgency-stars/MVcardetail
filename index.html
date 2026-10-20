@@ -21,7 +21,7 @@
   body { background: transparent; }
 
   .top { display: flex; align-items: center; justify-content: space-between; padding: calc(14px + env(safe-area-inset-top)) 0 0; }
-  .top .logo img { height: 52px; width: auto; border-radius: 12px; box-shadow: 0 0 0 1px rgba(46,230,214,.35), 0 0 28px rgba(46,230,214,.25); }
+  .top .logo img { height: 52px; width: auto; border-radius: 12px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent), 0 0 28px color-mix(in srgb, var(--accent) 25%, transparent); }
 
   .intro { padding: clamp(28px, 6vh, 64px) 0 22px; max-width: 760px; }
   .intro h1 { font-size: clamp(40px, 9vw, 84px); margin: 0; }
@@ -36,11 +36,11 @@
   @media (min-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } .cards .contact { grid-column: 1 / -1; } }
   .svc { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; min-height: 118px; padding: 16px 18px; border-radius: 18px; overflow: hidden; text-decoration: none;
     background: linear-gradient(90deg, rgba(10,12,14,.96) 45%, rgba(10,12,14,.55) 70%, rgba(10,12,14,.15)), var(--img, none) right center / 58% auto no-repeat, #0b0d0f;
-    border: 1px solid rgba(46,230,214,.35); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 0 22px -8px rgba(46,230,214,.45);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 0 22px -8px color-mix(in srgb, var(--accent) 45%, transparent);
     opacity: 0; transform: translateY(14px); animation: cardIn .7s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.15s + var(--i) * .07s); }
   @keyframes cardIn { to { opacity: 1; transform: none; } }
   .svc:hover { border-color: var(--accent); }
-  .svc .ico { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--accent); color: var(--accent); box-shadow: 0 0 16px -4px rgba(46,230,214,.6); }
+  .svc .ico { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--accent); color: var(--accent); box-shadow: 0 0 16px -4px color-mix(in srgb, var(--accent) 60%, transparent); }
   .svc .ico svg { width: 28px; height: 28px; }
   .svc h2 { margin: 0; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: 20px; line-height: 1.1; color: #fff; }
   .svc .meta { margin: 4px 0 10px; font-size: 14px; color: var(--accent); }
@@ -58,6 +58,7 @@
   .contact .addr { font-size: 13px; color: var(--muted); margin: 4px 0 0; }
 
   .badges { display: grid; grid-template-columns: repeat(4, 1fr); margin: 4px 0 18px; border: 1px solid var(--line); border-radius: 16px; background: rgba(10,12,14,.85); }
+  .badges b { font-weight: 600; }
   .badges div { display: grid; justify-items: center; gap: 6px; padding: 14px 6px; text-align: center; font: 600 11px/1.25 var(--display); text-transform: uppercase; letter-spacing: .02em; }
   .badges div + div { border-left: 1px solid var(--line); }
   .badges svg { width: 26px; height: 26px; color: var(--accent); }
@@ -75,60 +76,51 @@
   <video id="bgv" muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg"><source src="/video/hero.mp4" type="video/mp4"></video>
 </div>
 
-<main class="wrap">
+<main class="wrap" data-blocks>
   <header class="top">
     <a class="logo" href="/" aria-label="MV Car Detail"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="52" height="52"></a>
-    <a class="btn primary small" href="/booking">Book now</a>
+    <a class="btn primary small" href="/booking" data-edit="top_button" data-label="Top button">Book now</a>
   </header>
 
-  <section class="intro" style="padding-inline:0">
-    <h1 class="display">More than a wash.<br><em>Real detailing.</em></h1>
+  <section class="intro" style="padding-inline:0" data-block="intro" data-label="Headline" data-lock>
+    <h1 class="display" data-edit="hero_title" data-label="Headline">More than a wash.<br><em>Real detailing.</em></h1>
     <div class="bar"></div>
-    <p>Mobile detailing & shop in <b>Hollywood, FL</b>.<br>Miami-Dade · Broward · Charlotte</p>
+    <p data-edit="hero_sub" data-label="Text under the headline">Mobile detailing &amp; shop in <b>Hollywood, FL</b>.<br>Miami-Dade · Broward · Charlotte</p>
     <a class="rating" id="rating" href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b id="r-val">4.9</b><span class="muted" id="r-count">46 Google reviews</span></a>
   </section>
 
-  <section class="cards" id="cards" style="padding:0 0 14px" aria-label="Services"></section>
+  <section class="cards" id="cards" style="padding:0 0 14px" aria-label="Services" data-block="cards" data-label="Service cards" data-lock></section>
 
-  <div class="badges">
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg>Mobile<span>& shop</span></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M12 15l3.4 5.89l1.6 -3.23l3.6 .23l-3.4 -5.89M6.8 12l-3.4 5.89l3.6 -.23l1.6 3.23l3.4 -5.89"/></svg>Meguiar's<span>certified</span></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.85a12 12 0 0 1 -7.96 -14.85a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06M15 19l2 2l4 -4"/></svg>Price<span>upfront</span></div>
-    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z"/></svg>Since<span>2018</span></div>
+  <div class="badges" data-block="badges" data-label="Badges strip">
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg><b data-edit="badge1" data-label="Badge 1">Mobile</b><span data-edit="badge1_sub" data-label="Badge 1 (second line)">&amp; shop</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M12 15l3.4 5.89l1.6 -3.23l3.6 .23l-3.4 -5.89M6.8 12l-3.4 5.89l3.6 -.23l1.6 3.23l3.4 -5.89"/></svg><b data-edit="badge2" data-label="Badge 2">Meguiar's</b><span data-edit="badge2_sub" data-label="Badge 2 (second line)">certified</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.85a12 12 0 0 1 -7.96 -14.85a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06M15 19l2 2l4 -4"/></svg><b data-edit="badge3" data-label="Badge 3">Price</b><span data-edit="badge3_sub" data-label="Badge 3 (second line)">upfront</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z"/></svg><b data-edit="badge4" data-label="Badge 4">Since</b><span data-edit="badge4_sub" data-label="Badge 4 (second line)">2018</span></div>
   </div>
 
-  <div class="map"><iframe title="MV Car Detail on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=MV+CAR+DETAIL,+3937+Pembroke+Rd,+Hollywood,+FL+33021&output=embed"></iframe></div>
+  <div class="map" data-block="map" data-label="Map"><iframe title="MV Car Detail on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=MV+CAR+DETAIL,+3937+Pembroke+Rd,+Hollywood,+FL+33021&output=embed"></iframe></div>
 
-  <nav class="foot"><a href="/moreinfo">More info</a><a href="/moreinfo#faq">FAQ</a><a href="/terms">Terms</a><a href="https://link.me/mvcardetail" target="_blank" rel="noopener">link.me/mvcardetail</a></nav>
+  <nav class="foot" data-block="foot" data-label="Footer links"><a href="/moreinfo">More info</a><a href="/moreinfo#faq">FAQ</a><a href="/terms">Terms</a><a href="https://link.me/mvcardetail" target="_blank" rel="noopener">link.me/mvcardetail</a></nav>
 </main>
 
 <a class="fab-wa wa-link" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span data-icon="wa"></span></a>
 
 <script type="module">
 import { loadContent, money, dur, wa, esc, icons, shineText, offerFor } from '/assets/common.js';
+import { applyPage, onPreview, safeUrl, ICONS } from '/assets/site.js';
 
 // Background video: skip for reduced motion / data saver, otherwise play muted inline (iOS + Android)
 const v = document.getElementById('bgv');
 const lite = matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData;
 if (!lite) { v.preload = 'auto'; v.play().catch(() => {}); }
 
-document.querySelectorAll('.wa-link').forEach(a => a.href = wa('Hi MV Car Detail! I would like to book a detail.'));
-icons();
-shineText();
-
-// Icons per service level (Tabler-style outline paths)
-const P = {
-  1: 'M7.5 19.42c2.6 2.1 6.4 2.1 9 0c2.6 -2.1 3.26 -5.7 1.56 -8.54l-4.89 -7.26a1.38 1.38 0 0 0 -2.35 0l-4.89 7.26c-1.7 2.84 -1.04 6.44 1.57 8.54z',
-  2: 'M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6z',
-  3: 'M5 11a2 2 0 0 1 2 2v2h10v-2a2 2 0 1 1 4 0v4a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-4a2 2 0 0 1 2 -2zM5 11v-5a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v5M6 19v2M18 19v2',
-  4: 'M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5',
-  5: 'M6 5h12l3 5l-8.5 9.5a.7 .7 0 0 1 -1 0l-8.5 -9.5l3 -5M10 12l-2 -2.2l.6 -1',
-};
+const waUrl = wa('Hi MV Car Detail! I would like to book a detail.');
+const LEVEL_ICON = { 1: 'drop', 2: 'sparkles', 3: 'seat', 4: 'car', 5: 'diamond' };
 const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
 const arrow = svg('M5 12h14M13 18l6 -6M13 6l6 6');
-const phone = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"/></svg>';
+const phone = svg(ICONS.phone);
 
-const { services, offer, google } = await loadContent();
+const { services, offer, google, pages } = await loadContent();
 
 if (google) {
   if (google.rating) document.getElementById('r-val').textContent = Number(google.rating).toFixed(1);
@@ -139,34 +131,67 @@ const mapsUrl = google?.url || 'https://maps.app.goo.gl/iEH7dF7M1SHxewJR6';
 const address = google?.address || '3937 Pembroke Rd, Hollywood, FL 33021';
 const linkme = google?.linkme || 'https://link.me/mvcardetail';
 
-document.getElementById('cards').innerHTML = services.map((s, i) => {
+const serviceCard = s => {
   const o = offerFor(offer, s.slug);
-  return `<a class="svc" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}" style="--i:${i};--img:url('${esc(s.image_url || '')}')">
-    ${o ? '<span class="tag">First visit offer</span>' : s.popular ? '<span class="tag pop">Most popular</span>' : ''}
-    <span class="ico">${svg(P[s.level] || P[4])}</span>
+  return `<a class="svc" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}" style="--img:url('${esc(s.image_url || '')}')">
+    ${o ? '<span class="tag" data-edit="tag_offer" data-label="Card label: offer">First visit offer</span>' : s.popular ? '<span class="tag pop" data-edit="tag_popular" data-label="Card label: popular">Most popular</span>' : ''}
+    <span class="ico">${svg(ICONS[LEVEL_ICON[s.level]] || ICONS.car)}</span>
     <span>
       <h2>${esc(s.name)}</h2>
-      <p class="meta">${o ? `<s>${money(s.price)}</s>` : 'from '}${money(o ? o.price : s.price)} · ${dur(s.duration_min)}</p>
-      <span class="go">Book now ${arrow}</span>
+      <p class="meta">${o ? `<s>${money(s.price)}</s>` : '<span data-edit="from_word" data-label="Word before prices">from</span> '}${money(o ? o.price : s.price)} · ${dur(s.duration_min)}</p>
+      <span class="go"><span data-edit="card_button" data-label="Card button">Book now</span> ${arrow}</span>
     </span>
   </a>`;
-}).join('') + `
-  <div class="svc contact" style="--i:${services.length}">
+};
+const customCard = x => {
+  const url = safeUrl(x.url) || '/booking';
+  return `<a class="svc" href="${esc(url)}"${/^https?:/.test(url) ? ' target="_blank" rel="noopener"' : ''} style="--img:url('${esc(safeUrl(x.image))}')">
+    <span class="ico">${svg(ICONS[x.icon] || ICONS.star)}</span>
+    <span>
+      <h2>${esc(x.title)}</h2>
+      ${x.meta ? `<p class="meta">${esc(x.meta)}</p>` : ''}
+      <span class="go">${esc(x.button || 'Learn more')} ${arrow}</span>
+    </span>
+  </a>`;
+};
+const contactCard = () => `<div class="svc contact">
     <span class="ico">${phone}</span>
     <span>
-      <h2>Contact us</h2>
+      <h2 data-edit="contact_title" data-label="Contact card title">Contact us</h2>
       <p class="addr">${esc(address)}</p>
       <span class="links">
         <a href="tel:+17865686564">${phone}English · 786 568 6564</a>
         <a href="tel:+19542687993">${phone}Español · 954 268 7993</a>
-        <a class="wa-link" href="${wa('Hi MV Car Detail! I have a question.')}" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
+        <a class="wa-link" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
         <a href="mailto:mvcardetail01@gmail.com"><span data-icon="mail"></span>Email</a>
         <a href="${esc(mapsUrl)}" target="_blank" rel="noopener">${svg('M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z')}Directions</a>
         <a href="${esc(linkme)}" target="_blank" rel="noopener">${svg('M9 15l6 -6M11 6l.46 -.54a5 5 0 0 1 7.07 7.07l-.53 .47M13 18l-.4 .53a5.07 5.07 0 0 1 -7.12 0a4.97 4.97 0 0 1 0 -7.07l.52 -.46')}link.me</a>
       </span>
     </span>
   </div>`;
-icons(document.getElementById('cards'));
+
+// Every card the admin can order / hide: services, custom cards and the contact card
+function cardList(cfg) {
+  const c = cfg.cards || {};
+  const all = [
+    ...services.map(s => ({ id: s.slug, html: serviceCard(s) })),
+    ...(c.extra || []).filter(x => x?.id && x.title).map(x => ({ id: x.id, html: customCard(x) })),
+    { id: 'contact', html: contactCard() },
+  ];
+  const rank = id => { const i = (c.order || []).indexOf(id); return i < 0 ? 1e3 + all.findIndex(x => x.id === id) : i; };
+  return all.filter(x => !(c.hidden || []).includes(x.id)).sort((a, b) => rank(a.id) - rank(b.id));
+}
+
+function render(cfg) {
+  document.getElementById('cards').innerHTML = cardList(cfg).map(x => x.html).join('');
+  document.querySelectorAll('#cards > .svc').forEach((el, i) => el.style.setProperty('--i', i));
+  applyPage(cfg, { waUrl });
+  document.querySelectorAll('.wa-link').forEach(a => a.href = waUrl);
+  icons();
+  shineText();
+}
+render(pages.home);
+onPreview(render);
 </script>
 </body>
 </html>

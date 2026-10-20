@@ -1,3 +1,4 @@
+import { applyPage, onPreview } from '/assets/site.js';
 import { sb, shineText, loadContent, money, dur, wa, esc, icons, offerFor, SIZES, sizeLabel, priceFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
 
 const $ = id => document.getElementById(id);
@@ -6,8 +7,6 @@ const params = new URLSearchParams(location.search);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 document.querySelectorAll('.wa-link').forEach(a => a.href = wa('Hi MV Car Detail! I have a question about booking.'));
-icons();
-shineText();
 
 const state = { service: null, size: 'sedan', day: null, start: null, slots: [] };
 
@@ -18,7 +17,18 @@ const say = text => { caption.textContent = text; caption.classList.remove('swap
 import('/assets/car3d.js').then(m => { car = m.mountCar($('car'), say); if (state.service) car.setLevel(state.service.level); })
   .catch(() => { $('car').remove(); say('Preview unavailable on this device'); });
 
-const { services, offer, photos } = await loadContent();
+const { services, offer, photos, pages } = await loadContent();
+
+// Admin-editable texts, extra blocks, order and visibility; steps renumber to match the order
+const waUrl = wa('Hi MV Car Detail! I have a question about booking.');
+function renderPage(cfg) {
+  applyPage(cfg, { waUrl });
+  [...form.querySelectorAll(':scope > .step:not([hidden]) h2 > i')].forEach((el, i) => el.textContent = i + 1);
+  icons();
+  shineText();
+}
+renderPage(pages.booking);
+onPreview(renderPage);
 
 // ---------- Step 1-2: vehicle size + packages (prices follow the size) ----------
 function renderPkgs() {

@@ -10,6 +10,16 @@ Estático (HTML + JS sin build) en Vercel, datos en Supabase y automatizaciones 
 | Admin | `/admin` | Reservas, precios y descripciones, oferta, fotos (subida con redimensionado), testimonios |
 | Recordatorio | `/api/ics` | Archivo de calendario con alarmas (1 día y 2 h antes); en iPhone abre "Añadir al calendario" |
 
+## Editor del sitio (admin → Site editor)
+
+Cambios con vista previa en vivo (teléfono o escritorio); nada se publica hasta tocar **Save & publish**.
+
+- **Diseño** (todo el sitio): colores de acento, destacado, fondo, tarjetas y texto; fuente de títulos y de texto; títulos en mayúsculas; redondeo de esquinas.
+- **Home**: cualquier texto con editor (negrita, cursiva, color de acento, enlaces); orden y visibilidad de secciones; orden, visibilidad y tarjetas nuevas (título, texto, botón, enlace, foto, ícono); bloques propios de texto o de botones.
+- **Booking**: orden de los pasos (se renumeran solos) y secciones, ocultar el paso del vehículo, el carro 3D o la galería, títulos y botones, bloques propios de texto o botones en cualquier posición. Los pasos obligatorios no se pueden ocultar.
+
+Se guarda en `mvcd_settings` (`theme`, `page_home`, `page_booking`). Para que algo nuevo del HTML sea editable basta con marcarlo: `data-edit="clave" data-label="Nombre"` para textos y `data-block="id" data-label="Nombre"` para secciones (dentro del contenedor `[data-blocks]`); `assets/site.js` hace el resto.
+
 ## Cómo funciona una reserva
 
 1. El cliente elige un horario. Los horarios ocupados vienen de `mvcd_slots` (reservas web + eventos de Google Calendar) y se actualizan en tiempo real (Supabase Realtime).

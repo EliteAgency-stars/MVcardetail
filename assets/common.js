@@ -1,4 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
+import { applyTheme } from '/assets/site.js';
 
 // Public values only (publishable key; RLS protects writes).
 export const SUPABASE_URL = 'https://opagblruzwsrxsggkjsa.supabase.co';
@@ -49,7 +50,8 @@ export async function loadContent() {
     sb.from('mvcd_testimonials').select('*').eq('published', true).order('created_at', { ascending: false }),
   ]);
   const cfg = Object.fromEntries((settings.data || []).map(r => [r.key, r.value]));
-  return { services: services.data || [], offer: cfg.offer, google: cfg.google, photos: photos.data || [], testimonials: testimonials.data || [] };
+  if (cfg.theme) applyTheme(cfg.theme);
+  return { services: services.data || [], offer: cfg.offer, google: cfg.google, theme: cfg.theme, pages: { home: cfg.page_home || {}, booking: cfg.page_booking || {} }, photos: photos.data || [], testimonials: testimonials.data || [] };
 }
 
 const I = {

@@ -23,12 +23,13 @@
   .stage .lvlbar i.on { background: var(--accent); }
   .stage .replay { pointer-events: auto; }
   .caption { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); padding: 10px 18px; border-radius: 999px; background: rgba(7,8,9,.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); font-size: 14px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
-  .caption::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 rgba(46,230,214,.6); animation: ping 1.6s infinite; }
+  .caption::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); animation: ping 1.6s infinite; }
   .caption.swap { animation: capIn .45s cubic-bezier(.2,.8,.2,1); }
   @keyframes capIn { from { opacity: 0; transform: translate(-50%, 10px); } }
-  @keyframes ping { 70% { box-shadow: 0 0 0 10px rgba(46,230,214,0); } 100% { box-shadow: 0 0 0 0 rgba(46,230,214,0); } }
+  @keyframes ping { 70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 0%, transparent); } 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); } }
   .hint { position: absolute; right: 20px; bottom: 76px; font-size: 12px; color: var(--muted); }
 
+  .layout:has(> .stage[hidden]) { grid-template-columns: minmax(0, 720px); justify-content: center; }
   .steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .step { min-width: 0; }
   .step { padding: 22px; }
@@ -45,7 +46,7 @@
   .pkg small { color: var(--muted); font-size: 13px; }
   .pkg .tag { font: 700 10px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); margin-left: 8px; vertical-align: 2px; }
   .pkg .tag.deal { background: var(--offer); color: #241600; }
-  .pkg:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
+  .pkg:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
   .pkg-detail { margin-top: 12px; font-size: 13px; color: var(--muted); }
   .pkg-detail ul { margin: 6px 0 0; padding-left: 18px; columns: 2; column-gap: 20px; }
   @media (max-width: 520px) { .pkg-detail ul { columns: 1; } }
@@ -54,14 +55,14 @@
   .sizes label { position: relative; display: grid; justify-items: center; gap: 6px; padding: 14px 8px; text-align: center; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 13px; line-height: 1.2; }
   .sizes input { position: absolute; opacity: 0; pointer-events: none; }
   .sizes svg { width: 34px; height: 34px; color: var(--muted); }
-  .sizes label:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
+  .sizes label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
   .sizes label:has(input:checked) svg { color: var(--accent); }
   .seg small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
   .shopinfo { margin: 0; font-size: 14px; color: var(--muted); } .shopinfo a { color: var(--accent); }
   .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
   .seg label { padding: 12px; text-align: center; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 14px; font-weight: 600; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
-  .seg label:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
+  .seg label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
 
   .live { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; font: 600 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--ok); }
   .live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: blink 1.4s infinite; }
@@ -71,7 +72,7 @@
   .day span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
   .day b { display: block; font-size: 20px; }
   .day em { display: block; font-style: normal; font-size: 10px; color: var(--muted); }
-  .day[aria-pressed=true] { border-color: var(--accent); background: rgba(46,230,214,.1); }
+  .day[aria-pressed=true] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .day:disabled { opacity: .35; cursor: not-allowed; }
   .times { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; margin-top: 12px; }
   .time { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 14px; font-weight: 600; transition: all .2s; }
@@ -175,7 +176,7 @@
 
 <main class="wrap">
   <div class="layout">
-    <div class="stage" id="stage">
+    <div class="stage" id="stage" data-block="stage" data-label="3D car animation">
       <canvas id="car" aria-label="3D preview of the selected detailing package"></canvas>
       <div class="top">
         <div><div class="lvlname" id="lvlname">-</div><div class="lvlbar" id="lvlbar"><i></i><i></i><i></i><i></i><i></i></div></div>
@@ -185,9 +186,9 @@
       <div class="caption" id="caption">Loading…</div>
     </div>
 
-    <form class="steps" id="form" novalidate>
-      <div class="card step" id="s0">
-        <h2><i>1</i>Your vehicle</h2>
+    <form class="steps" id="form" novalidate data-blocks>
+      <div class="card step" id="s0" data-block="vehicle" data-label="Step: vehicle type">
+        <h2><i>1</i><span data-edit="step_vehicle" data-label="Step title: vehicle">Your vehicle</span></h2>
         <div class="sizes">
           <label><input type="radio" name="size" value="sedan" checked><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg><b>Sedan / Coupe</b></label>
           <label><input type="radio" name="size" value="suv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-7l1 -4h11l4 4h1a2 2 0 0 1 2 2v5h-2m-4 0h-6M3 10h18M10 6v4"/></svg><b>SUV / Crossover</b></label>
@@ -195,14 +196,14 @@
         </div>
       </div>
 
-      <div class="card step" id="s1">
-        <h2><i>2</i>Package</h2>
+      <div class="card step" id="s1" data-block="package" data-label="Step: package" data-lock>
+        <h2><i>2</i><span data-edit="step_package" data-label="Step title: package">Package</span></h2>
         <div class="pkgs" id="pkgs"></div>
         <div class="pkg-detail" id="pkgdetail"></div>
       </div>
 
-      <div class="card step" id="s2">
-        <h2><i>3</i>Where</h2>
+      <div class="card step" id="s2" data-block="where" data-label="Step: where" data-lock>
+        <h2><i>3</i><span data-edit="step_where" data-label="Step title: where">Where</span></h2>
         <div class="seg two">
           <label><input type="radio" name="mode" value="shop">At our shop<small>Hollywood, FL</small></label>
           <label><input type="radio" name="mode" value="mobile" checked>We come to you<small>Home, office, marina</small></label>
@@ -217,15 +218,15 @@
         <p class="shopinfo" id="shopbox" hidden>3937 Pembroke Rd, Hollywood, FL 33021 · <a href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener">Directions</a></p>
       </div>
 
-      <div class="card step" id="s3">
-        <h2><i>4</i>When <span class="live">Live</span></h2>
+      <div class="card step" id="s3" data-block="when" data-label="Step: date and time" data-lock>
+        <h2><i>4</i><span data-edit="step_when" data-label="Step title: when">When</span> <span class="live">Live</span></h2>
         <div class="days" id="days"></div>
         <div class="times" id="times"></div>
-        <p class="empty" id="noslots" hidden>Fully booked. Try another day.</p>
+        <p class="empty" id="noslots" hidden data-edit="no_slots" data-label="Message when a day is full">Fully booked. Try another day.</p>
       </div>
 
-      <div class="card step" id="s4">
-        <h2><i>5</i>You</h2>
+      <div class="card step" id="s4" data-block="you" data-label="Step: contact details" data-lock>
+        <h2><i>5</i><span data-edit="step_you" data-label="Step title: contact details">You</span></h2>
         <div class="grid2">
           <label class="field">Name<input type="text" name="name" autocomplete="name" required></label>
           <label class="field">Phone<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
@@ -236,19 +237,19 @@
         </div>
       </div>
 
-      <div class="card summary">
+      <div class="card summary" data-block="summary" data-label="Summary and confirm button" data-lock>
         <div class="row"><span class="muted">Package</span><b id="sum-pkg">-</b></div>
         <div class="row"><span class="muted">When</span><b id="sum-when">Pick a time</b></div>
         <div class="row" style="align-items:end"><span class="muted">From</span><span class="total" id="sum-total">-</span></div>
-        <button class="btn primary confirm" type="submit">Confirm booking</button>
+        <button class="btn primary confirm" type="submit" data-edit="confirm_button" data-label="Confirm button">Confirm booking</button>
         <div class="err" id="err" role="alert"></div>
         <p class="muted" style="font-size:12px;margin:0">By booking you agree to our <a href="/terms" target="_blank" style="color:var(--accent)">Terms & Conditions</a>.</p>
       </div>
     </form>
   </div>
 
-  <section class="work" id="work">
-    <h2 class="display">Recent work</h2>
+  <section class="work" id="work" data-block="work" data-label="Recent work gallery">
+    <h2 class="display" data-edit="work_title" data-label="Gallery title">Recent work</h2>
     <div class="kb" id="kb"></div>
     <div class="thumbs" id="thumbs"></div>
     <p class="fineprint">Pay by debit or credit card after the service. Prices are for sedans and coupes; size, pet hair or heavy dirt can change it, always confirmed before we start.</p>
@@ -256,7 +257,7 @@
   </section>
 </main>
 
-<div class="mbar"><div class="t"><b id="m-total">-</b><small id="m-when">Pick a time</small><small style="display:block;font-size:10px">By booking you accept our <a href="/terms" target="_blank" style="color:var(--accent)">Terms</a></small></div><button class="btn primary" type="submit" form="form">Confirm booking</button></div>
+<div class="mbar"><div class="t"><b id="m-total">-</b><small id="m-when">Pick a time</small><small style="display:block;font-size:10px">By booking you accept our <a href="/terms" target="_blank" style="color:var(--accent)">Terms</a></small></div><button class="btn primary" type="submit" form="form" data-edit="confirm_button" data-label="Confirm button">Confirm booking</button></div>
 <a class="fab-wa wa-link" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span data-icon="wa"></span></a>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-live="polite">
@@ -265,7 +266,7 @@
     <div class="proc"><div class="spinner"></div><p id="proctext">Checking availability…</p></div>
     <div class="ok" id="ok">
       <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-      <h2>Booking confirmed!</h2>
+      <h2 data-edit="success_title" data-label="Success title">Booking confirmed!</h2>
       <div class="ref" id="ref"></div>
       <div class="ticket" id="ticket"></div>
       <button class="btn remind spot" id="remind" type="button"><span data-icon="bell"></span><span id="remindtxt">Activate reminder</span></button>

@@ -69,7 +69,7 @@
   .tier .inc summary:hover { color: var(--text); }
   .tier .inc ul { margin: 12px 0 0; }
   .tier .btn { width: 100%; }
-  .tier.popular { border-color: rgba(46,230,214,.5); box-shadow: 0 30px 60px -30px rgba(46,230,214,.35); }
+  .tier.popular { border-color: color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--accent) 35%, transparent); }
   .tier.deal { border-color: rgba(255,176,32,.55); background: linear-gradient(180deg, rgba(255,176,32,.08), transparent 40%), var(--surface); }
   .tier.deal .price b { color: var(--offer); }
   .ribbon { position: absolute; top: -12px; left: 22px; padding: 5px 12px; border-radius: 999px; font: 700 11px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); }
@@ -131,7 +131,7 @@
   .areas span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; }
   @media (max-width: 860px) { .visit { grid-template-columns: 1fr; } }
 
-  .cta-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: radial-gradient(120% 160% at 100% 0%, rgba(46,230,214,.12), transparent 55%), var(--surface); }
+  .cta-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: radial-gradient(120% 160% at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 55%), var(--surface); }
   .cta-band h2 { font-size: clamp(30px, 3.8vw, 50px); margin: 0; }
   .cta-band .ctas { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
   .gbar { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }

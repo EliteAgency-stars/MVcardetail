@@ -30,7 +30,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
-.display { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: -.01em; line-height: 1; }
+.display { font-family: var(--display); font-weight: 600; text-transform: var(--display-case, uppercase); letter-spacing: -.01em; line-height: 1; }
 .eyebrow { font: 600 12px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
 .muted { color: var(--muted); }
 
@@ -47,7 +47,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); text-decoration: none; font-weight: 600; cursor: pointer; transition: transform .15s, background .2s, box-shadow .2s; -webkit-tap-highlight-color: transparent; }
 .btn:active { transform: scale(.97); }
 .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-.btn.primary:hover { box-shadow: 0 0 0 6px rgba(46, 230, 214, .16); }
+.btn.primary:hover { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent); }
 .btn.wa { background: #25d366; color: #052e16; border-color: transparent; }
 .btn.small { min-height: 38px; padding: 0 16px; font-size: 14px; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
@@ -84,3 +84,11 @@ em .w, .accent .w { --base: var(--accent); }
 @keyframes rise { from { opacity: 0; transform: translateY(.45em); filter: blur(8px); } }
 @keyframes glint { 0% { background-position: 100% 0; } 22%, 100% { background-position: 0 0; } }
 @media (prefers-reduced-motion: reduce) { .w { animation: none !important; } }
+
+/* Admin-made blocks (text and buttons) */
+.accent { color: var(--accent); }
+.cb { padding: 22px; display: grid; gap: 12px; }
+.cb-title { margin: 0; font-family: var(--display); font-weight: 600; font-size: 20px; text-transform: var(--display-case, uppercase); }
+.cb-text { color: #d3d8dc; }
+.cb-text a { color: var(--accent); }
+.cb-btns { display: flex; flex-wrap: wrap; gap: 10px; }
