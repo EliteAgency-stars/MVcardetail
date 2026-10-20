@@ -38,7 +38,7 @@ function pickService(slug) {
   $('pkgdetail').innerHTML = `<b style="color:var(--text)">Includes</b><ul>${s.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul><p style="margin:8px 0 0">${esc(s.note)}</p>`;
   const o = offerFor(offer, s.slug);
   $('firstbox').hidden = !o;
-  if (o) $('firsttext').innerHTML = `<b>This is my first detail with MV</b> — apply code ${esc(o.code)}: ${esc(s.name)} for <b>${money(o.price)}</b> instead of ${money(s.price)}.`;
+  if (o) $('firsttext').innerHTML = `<b>This is my first detail with MV</b>: apply code ${esc(o.code)}: ${esc(s.name)} for <b>${money(o.price)}</b> instead of ${money(s.price)}.`;
   car?.setLevel(s.level);
   renderDays(); renderTimes(); summary();
 }
@@ -97,7 +97,7 @@ function renderTimes() {
   if (state.start && !ov.classList.contains('show') && list.some(x => x.busy && +x.start === +state.start)) {
     // Someone else just took the slot we had selected
     const lost = state.start; state.start = null; summary();
-    $('err').textContent = `${fmtTime(lost)} was just booked by someone else — please pick another time.`;
+    $('err').textContent = `${fmtTime(lost)} was just booked by someone else. Please pick another time.`;
   }
   $('times').innerHTML = list.map(x => `<button type="button" class="time" data-t="${+x.start}" ${x.busy ? 'disabled' : ''} aria-pressed="${+x.start === +state.start}">${fmtTime(x.start)}</button>`).join('');
   $('noslots').hidden = list.some(x => !x.busy);
@@ -130,12 +130,12 @@ function price() {
 }
 function summary() {
   const s = state.service;
-  $('sum-pkg').textContent = s ? s.name : '—';
+  $('sum-pkg').textContent = s ? s.name : '-';
   const when = state.start ? `${fmtDay(state.start)}, ${fmtTime(state.start)}` : 'Pick a time';
   $('sum-when').textContent = when; $('m-when').textContent = state.start ? when : `${s?.name || ''} · pick a time`;
   const p = price();
-  $('sum-total').innerHTML = p == null ? '—' : p < s.price ? `<s class="muted" style="font-size:18px;font-weight:400">${money(s.price)}</s> ${money(p)}` : money(p);
-  $('m-total').textContent = p == null ? '—' : money(p);
+  $('sum-total').innerHTML = p == null ? '-' : p < s.price ? `<s class="muted" style="font-size:18px;font-weight:400">${money(s.price)}</s> ${money(p)}` : money(p);
+  $('m-total').textContent = p == null ? '-' : money(p);
   ['s1', 's2', 's3', 's4'].forEach((id, i) => $(id).classList.toggle('done', [!!s, form.address.value.trim().length > 3, !!state.start,
     form.name.value.trim() && form.phone.value.trim() && /\S+@\S+\.\S+/.test(form.email.value) && form.vehicle.value.trim()][i]));
 }

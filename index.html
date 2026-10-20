@@ -11,9 +11,8 @@
 <meta property="og:image" content="/img/setmore-1.webp">
 <link rel="icon" href="/img/logo.webp">
 <link rel="apple-touch-icon" href="/img/logo.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/cabinet-grotesk-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 <style>
   /* Hero */
@@ -39,11 +38,11 @@
   /* Offer */
   .offer { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 28px; margin-bottom: 28px; border-radius: 24px; border: 1px solid rgba(255,176,32,.45); background: radial-gradient(120% 140% at 0% 0%, rgba(255,176,32,.16), transparent 55%), var(--surface); overflow: hidden; }
   .offer .tag { color: var(--offer); }
-  .offer h3 { font-family: var(--display); font-stretch: 112%; font-size: clamp(24px, 3.2vw, 36px); line-height: 1.05; margin: 10px 0 8px; }
+  .offer h3 { font-family: var(--display); font-size: clamp(24px, 3.2vw, 36px); line-height: 1.05; margin: 10px 0 8px; }
   .offer p { margin: 0; color: #cfd3d7; max-width: 640px; }
   .offer .prices { text-align: right; }
   .offer .was { color: var(--muted); text-decoration: line-through; font-size: 20px; }
-  .offer .now { font-family: var(--display); font-stretch: 120%; font-weight: 900; font-size: 64px; line-height: 1; color: var(--offer); }
+  .offer .now { font-family: var(--display); font-weight: 900; font-size: 64px; line-height: 1; color: var(--offer); }
   .offer .btn { margin-top: 12px; background: var(--offer); color: #241600; border: 0; }
   .offer::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%); transform: translateX(-100%); animation: sheen 5s ease-in-out infinite; pointer-events: none; }
   @keyframes sheen { 60%, 100% { transform: translateX(100%); } }
@@ -56,11 +55,11 @@
   .tier .lvl { display: flex; gap: 4px; margin-bottom: 18px; }
   .tier .lvl i { height: 4px; flex: 1; border-radius: 4px; background: var(--line); }
   .tier .lvl i.on { background: var(--accent); }
-  .tier h3 { font-family: var(--display); font-stretch: 110%; font-size: 22px; margin: 0 0 6px; line-height: 1.1; }
+  .tier h3 { font-family: var(--display); font-size: 22px; margin: 0 0 6px; line-height: 1.1; }
   .tier .tagline { font-size: 14px; color: var(--muted); margin: 0 0 18px; min-height: 66px; }
   .tier .price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   .tier .price small { color: var(--muted); font-size: 13px; }
-  .tier .price b { font-family: var(--display); font-stretch: 120%; font-size: 46px; line-height: 1; }
+  .tier .price b { font-family: var(--display); font-size: 46px; line-height: 1; }
   .tier .price s { color: var(--muted); font-size: 18px; }
   .tier .time { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
   .tier ul { list-style: none; padding: 0; margin: 0 0 22px; display: grid; gap: 8px; font-size: 14px; flex: 1; align-content: start; }
@@ -74,7 +73,7 @@
   .ribbon { position: absolute; top: -12px; left: 22px; padding: 5px 12px; border-radius: 999px; font: 700 11px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); }
   .deal .ribbon { background: var(--offer); color: #241600; }
   .upgrade { margin-top: 22px; padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
-  .upgrade b { font-family: var(--display); font-stretch: 112%; font-size: 20px; }
+  .upgrade b { font-family: var(--display); font-size: 20px; }
   .upgrade ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
   .upgrade li { padding: 6px 12px; border-radius: 999px; background: var(--surface-2); font-size: 13px; }
   .fine { margin-top: 18px; font-size: 13px; color: var(--muted); max-width: 820px; }
@@ -82,7 +81,7 @@
   /* Trust strip */
   .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
   .trust div { background: var(--bg); padding: 32px 24px; }
-  .trust b { display: block; font-family: var(--display); font-stretch: 115%; font-size: 30px; line-height: 1.1; margin-bottom: 6px; }
+  .trust b { display: block; font-family: var(--display); font-size: 30px; line-height: 1.1; margin-bottom: 6px; }
   .trust span { color: var(--muted); font-size: 14px; }
   @media (max-width: 800px) { .trust { grid-template-columns: 1fr 1fr; } }
 
@@ -100,7 +99,7 @@
   /* Steps */
   .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: s; }
   .steps .card { padding: 28px; }
-  .steps .card::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-stretch: 120%; font-weight: 900; font-size: 52px; color: transparent; -webkit-text-stroke: 1px var(--accent); display: block; line-height: 1; margin-bottom: 16px; }
+  .steps .card::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-weight: 900; font-size: 52px; color: transparent; -webkit-text-stroke: 1px var(--accent); display: block; line-height: 1; margin-bottom: 16px; }
   .steps h3 { margin: 0 0 6px; font-size: 20px; }
   .steps p { margin: 0; color: var(--muted); }
   @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
@@ -117,7 +116,7 @@
   /* Visit */
   .visit { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
   .visit .card { padding: 30px; }
-  .visit h3 { margin: 0 0 16px; font-family: var(--display); font-stretch: 112%; font-size: 26px; }
+  .visit h3 { margin: 0 0 16px; font-family: var(--display); font-size: 26px; }
   .hours { width: 100%; border-collapse: collapse; font-size: 15px; }
   .hours td { padding: 9px 0; border-bottom: 1px solid var(--line); }
   .hours td:last-child { text-align: right; }
@@ -148,9 +147,9 @@
     <div class="wrap">
       <span class="eyebrow">Mobile detailing · Since 2018</span>
       <h1 class="display">Showroom shine, <em>delivered.</em></h1>
-      <p class="lead">Professional inside & outside detailing at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte. Meguiar's certified — we bring the water, power and products.</p>
+      <p class="lead">Professional inside & outside detailing at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte. Meguiar's certified. We bring the water, power and products.</p>
       <div class="ctas">
-        <a class="btn primary" href="/booking">Book your detail — from <span id="from-price">$35</span></a>
+        <a class="btn primary" href="/booking">Book from <span id="from-price">$35</span></a>
         <a class="btn wa" id="hero-wa" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>Fast quote on WhatsApp</a>
       </div>
       <div class="chips"><span>Meguiar's certified</span><span>We come to you</span><span>Price confirmed before we start</span><span>Debit & credit accepted</span></div>
@@ -159,7 +158,7 @@
 
   <div class="trust">
     <div><b>2018</b><span>Detailing cars, boats & aircraft since</span></div>
-    <div><b>0 min</b><span>Spent in a waiting room — we come to you</span></div>
+    <div><b>0 min</b><span>Spent in a waiting room. We come to you</span></div>
     <div><b>5 levels</b><span>From a quick wash to premium care</span></div>
     <div><b>Upfront</b><span>Any adjustment confirmed before work begins</span></div>
   </div>
@@ -169,12 +168,12 @@
       <div class="head reveal">
         <span class="eyebrow">Pricing</span>
         <h2 class="display">Pick your level of clean.</h2>
-        <p>Transparent starting prices for sedans & coupes. Larger vehicles or heavy soiling? We confirm the final price with you before we start — never after.</p>
+        <p>Transparent starting prices for sedans & coupes. Larger vehicles or heavy soiling? We confirm the final price with you before we start, never after.</p>
       </div>
       <div id="offer"></div>
       <div class="tiers" id="tiers"></div>
       <div id="upgrade"></div>
-      <p class="fine">Prices are based on standard-size sedans and coupes in average condition. Additional charges may apply depending on vehicle size, condition, pet hair, stains or excessive dirt. Any price adjustment will be confirmed before service begins. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately — <a href="#" class="wa-link">ask us on WhatsApp</a>.</p>
+      <p class="fine">Prices are based on standard-size sedans and coupes in average condition. Additional charges may apply depending on vehicle size, condition, pet hair, stains or excessive dirt. Any price adjustment will be confirmed before service begins. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately. <a href="#" class="wa-link">ask us on WhatsApp</a>.</p>
     </div>
   </section>
 
@@ -182,7 +181,7 @@
     <div class="wrap head reveal">
       <span class="eyebrow">Our work</span>
       <h2 class="display">Driveways, hangars, marinas.</h2>
-      <p>Everyday drivers to exotics and aircraft — same obsessive process every time.</p>
+      <p>Everyday drivers to exotics and aircraft, same obsessive process every time.</p>
     </div>
     <div class="marquee" id="gallery"></div>
   </section>
@@ -215,7 +214,7 @@
       </div>
       <div class="card reveal contact">
         <h3>Talk to us</h3>
-        <a href="#" class="wa-link" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp — fastest reply</a>
+        <a href="#" class="wa-link" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp (fastest reply)</a>
         <a href="tel:+19542687993"><span data-icon="phone"></span>+1 954 268 7993</a>
         <a href="mailto:mvcardetail01@gmail.com"><span data-icon="mail"></span>mvcardetail01@gmail.com</a>
         <div class="socials" style="margin-top:20px">

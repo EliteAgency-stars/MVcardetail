@@ -182,7 +182,7 @@ async function loadTestimonials() {
     <div class="row" style="flex-direction:column;align-items:end">
       <label class="toggle"><input type="checkbox" data-pub ${t.published ? 'checked' : ''}> Published</label>
       <button class="btn small danger" data-del>Delete</button>
-    </div></article>`).join('') || '<p class="muted">No testimonials yet — add your first one above.</p>';
+    </div></article>`).join('') || '<p class="muted">No testimonials yet. Add your first one above.</p>';
 }
 $('tform').onsubmit = async e => {
   e.preventDefault();

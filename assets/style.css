@@ -1,3 +1,8 @@
+@font-face { font-family: 'Cabinet Grotesk'; src: url('/fonts/cabinet-grotesk-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Cabinet Grotesk'; src: url('/fonts/cabinet-grotesk-800.woff2') format('woff2'); font-weight: 800 900; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-700.woff2') format('woff2'); font-weight: 600 700; font-display: swap; }
 :root {
   --bg: #070809;
   --surface: #101215;
@@ -11,8 +16,8 @@
   --ok: #16c172;
   --danger: #ff5a5f;
   --radius: 18px;
-  --display: 'Archivo', system-ui, sans-serif;
-  --body: 'Inter', system-ui, sans-serif;
+  --display: 'Cabinet Grotesk', system-ui, sans-serif;
+  --body: 'Satoshi', system-ui, sans-serif;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -24,7 +29,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
-.display { font-family: var(--display); font-stretch: 118%; font-weight: 800; letter-spacing: -.02em; line-height: .98; }
+.display { font-family: var(--display); font-weight: 800; letter-spacing: -.02em; line-height: .98; }
 .eyebrow { font: 600 12px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
 .muted { color: var(--muted); }
 

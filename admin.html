@@ -7,9 +7,8 @@
 <title>Admin · MV Car Detail</title>
 <meta name="theme-color" content="#070809">
 <link rel="icon" href="/img/logo.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/cabinet-grotesk-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 <style>
   .login { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px; }
@@ -22,7 +21,7 @@
   .tabs button { flex: none; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-weight: 600; font-size: 14px; }
   .tabs button[aria-selected=true] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
   .panel { padding: 8px 0 80px; display: grid; gap: 14px; }
-  .panel h2 { margin: 6px 0 0; font-family: var(--display); font-stretch: 112%; font-size: 26px; }
+  .panel h2 { margin: 6px 0 0; font-family: var(--display); font-size: 26px; }
   .box { padding: 20px; display: grid; gap: 12px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
   .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
@@ -101,7 +100,7 @@
     <section class="panel" data-panel="photos" hidden>
       <h2>Photos</h2>
       <p class="muted" style="margin:0">“Hero” is the big image at the top of the landing page (the first one is used). “Gallery” photos appear in Our work and on the booking page.</p>
-      <label class="drop" id="drop"><input type="file" id="files" accept="image/*" multiple hidden><b>Upload photos</b><br><span class="muted">Click or drop images here — they're resized automatically</span></label>
+      <label class="drop" id="drop"><input type="file" id="files" accept="image/*" multiple hidden><b>Upload photos</b><br><span class="muted">Click or drop images here. They're resized automatically</span></label>
       <div class="photos" id="photos"></div>
     </section>
 
