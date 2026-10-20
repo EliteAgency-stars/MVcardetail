@@ -44,3 +44,7 @@ python -m http.server 5173
 ```
 
 Abrir `http://localhost:5173/booking.html` (las URLs limpias solo funcionan en Vercel; `/api/ics` también).
+
+## Créditos
+
+Modelo 3D del booking (`models/car.glb`): [Car Concept](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept) de Eric Chadwick, Darmstadt Graphics Group, licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Modificado: el logo de Khronos de la placa se reemplazó por el de MV y se comprimió con Draco. El crédito visible está al pie de `/booking` y es obligatorio por la licencia.
