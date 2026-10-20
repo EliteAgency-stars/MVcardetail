@@ -3,363 +3,170 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MV Car Detail · Mobile Car Detailing in Miami & Charlotte</title>
-<meta name="description" content="Professional mobile car detailing since 2018. Meguiar's certified. Exterior wash from $35, full detail from $149. We come to your home, office, marina or hangar in Miami-Dade, Broward and Charlotte.">
+<title>MV Car Detail · Book your detail</title>
+<meta name="description" content="Professional mobile detailing and shop in Hollywood, FL. Serving Miami-Dade, Broward and Charlotte. Pick your service and book in seconds.">
 <meta name="theme-color" content="#070809">
-<meta property="og:title" content="MV Car Detail · We come to you">
-<meta property="og:description" content="Mobile detailing in Miami-Dade, Broward & Charlotte. Book online in 60 seconds.">
-<meta property="og:image" content="/img/setmore-1.webp">
+<meta property="og:title" content="MV Car Detail · Book your detail">
+<meta property="og:image" content="/video/hero-poster.jpg">
 <link rel="icon" href="/img/logo.webp">
 <link rel="apple-touch-icon" href="/img/logo.webp">
 <link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  /* Hero */
-  .hero { position: relative; min-height: min(92svh, 860px); display: grid; align-items: end; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; }
-  .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 70%; transform: scale(1.08); animation: heroZoom 18s ease-out forwards; }
-  @keyframes heroZoom { to { transform: scale(1); } }
-  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,8,9,.35) 0%, rgba(7,8,9,.2) 35%, rgba(7,8,9,.92) 78%, var(--bg) 100%), linear-gradient(90deg, rgba(7,8,9,.75), transparent 70%); }
-  .hero .wrap { position: relative; z-index: 2; padding: 120px 0 64px; }
-  .hero h1 { font-size: clamp(44px, 8.4vw, 112px); margin: 18px 0 20px; max-width: 12ch; }
-  .hero h1 em { font-style: normal; color: var(--accent); }
-  .hero p.lead { font-size: clamp(17px, 2vw, 20px); max-width: 560px; color: #d5d9dd; margin: 0 0 30px; }
-  .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  /* Background video, fixed behind everything */
+  .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #000 url('/video/hero-poster.jpg') center / cover; }
+  .bg video { width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+  .bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 0%, rgba(7,8,9,.2), rgba(7,8,9,.85) 70%), linear-gradient(180deg, rgba(7,8,9,.35), rgba(7,8,9,.92) 55%); }
+  body { background: transparent; }
 
-  section { padding: clamp(72px, 10vw, 128px) 0; }
-  .head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 760px; }
-  .head h2 { font-size: clamp(36px, 5.4vw, 68px); margin: 0; }
-  .head p { margin: 0; color: var(--muted); font-size: 18px; }
+  .top { display: flex; align-items: center; justify-content: space-between; padding: calc(14px + env(safe-area-inset-top)) 0 0; }
+  .top .logo img { height: 52px; width: auto; border-radius: 12px; box-shadow: 0 0 0 1px rgba(46,230,214,.35), 0 0 28px rgba(46,230,214,.25); }
 
-  /* Offer */
-  .offer { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 28px; margin-bottom: 28px; border-radius: 24px; border: 1px solid rgba(255,176,32,.45); background: radial-gradient(120% 140% at 0% 0%, rgba(255,176,32,.16), transparent 55%), var(--surface); overflow: hidden; }
-  .offer .tag { color: var(--offer); }
-  .offer h3 { font-family: var(--display); font-size: clamp(24px, 3.2vw, 36px); line-height: 1.05; margin: 10px 0 8px; }
-  .offer p { margin: 0; color: #cfd3d7; max-width: 640px; }
-  .offer .prices { text-align: right; }
-  .offer .was { color: var(--muted); text-decoration: line-through; font-size: 20px; }
-  .offer .now { font-family: var(--display); font-weight: 600; font-size: 64px; line-height: 1; color: var(--offer); }
-  .offer .btn { margin-top: 12px; background: var(--offer); color: #241600; border: 0; }
-  .offer::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%); transform: translateX(-100%); animation: sheen 5s ease-in-out infinite; pointer-events: none; }
-  @keyframes sheen { 60%, 100% { transform: translateX(100%); } }
-  @media (max-width: 700px) { .offer { grid-template-columns: 1fr; } .offer .prices { text-align: left; } }
+  .intro { padding: clamp(28px, 6vh, 64px) 0 22px; max-width: 760px; }
+  .intro h1 { font-size: clamp(40px, 9vw, 84px); margin: 0; }
+  .intro .bar { width: 44px; height: 3px; border-radius: 3px; background: var(--accent); margin: 18px 0 14px; }
+  .intro p { margin: 0; font-family: var(--display); font-weight: 500; text-transform: uppercase; letter-spacing: .02em; font-size: clamp(14px, 2.2vw, 18px); color: #e3e7ea; }
+  .intro p b { color: var(--accent); font-weight: 600; }
+  .rating { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 7px 14px; border-radius: 999px; background: rgba(16,18,21,.7); border: 1px solid var(--line); font-size: 14px; text-decoration: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .rating .stars { color: var(--offer); letter-spacing: 2px; }
 
-  /* Pricing */
-  .tiers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; align-items: stretch; }
-  @media (max-width: 1100px) { .tiers { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
-  .tier { position: relative; display: flex; flex-direction: column; padding: 26px 22px 22px; }
-  .tier .lvl { display: flex; gap: 4px; margin-bottom: 18px; }
-  .tier .lvl i { height: 4px; flex: 1; border-radius: 4px; background: var(--line); }
-  .tier .lvl i.on { background: var(--accent); }
-  .tier h3 { font-family: var(--display); font-size: 22px; margin: 0 0 16px; line-height: 1.1; }
-  .tier .price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .tier .price small { color: var(--muted); font-size: 13px; }
-  .tier .price b { font-family: var(--display); font-size: 46px; line-height: 1; }
-  .tier .price s { color: var(--muted); font-size: 18px; }
-  .tier .time { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
-  .tier ul { list-style: none; padding: 0; display: grid; gap: 8px; }
-  .tier li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; color: #d7dbdf; }
-  .tier li svg { width: 16px; height: 16px; color: var(--accent); margin-top: 3px; }
-  .tier .inc { flex: 1; margin-bottom: 20px; font-size: 14px; }
-  .tier .inc summary { cursor: pointer; color: var(--muted); width: max-content; }
-  .tier .inc summary:hover { color: var(--text); }
-  .tier .inc ul { margin: 12px 0 0; }
-  .tier .btn { width: 100%; }
-  .tier.popular { border-color: rgba(46,230,214,.5); box-shadow: 0 30px 60px -30px rgba(46,230,214,.35); }
-  .tier.deal { border-color: rgba(255,176,32,.55); background: linear-gradient(180deg, rgba(255,176,32,.08), transparent 40%), var(--surface); }
-  .tier.deal .price b { color: var(--offer); }
-  .ribbon { position: absolute; top: -12px; left: 22px; padding: 5px 12px; border-radius: 999px; font: 700 11px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); }
-  .deal .ribbon { background: var(--offer); color: #241600; }
-  .fine { margin-top: 18px; font-size: 13px; color: var(--muted); max-width: 820px; }
-  .fine summary { cursor: pointer; width: max-content; }
-  .fine p { margin: 8px 0 0; }
+  /* Service cards */
+  .cards { display: grid; gap: 10px; padding-bottom: 14px; }
+  @media (min-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } .cards .contact { grid-column: 1 / -1; } }
+  .svc { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; min-height: 118px; padding: 16px 18px; border-radius: 18px; overflow: hidden; text-decoration: none;
+    background: linear-gradient(90deg, rgba(10,12,14,.96) 45%, rgba(10,12,14,.55) 70%, rgba(10,12,14,.15)), var(--img, none) right center / 58% auto no-repeat, #0b0d0f;
+    border: 1px solid rgba(46,230,214,.35); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 0 22px -8px rgba(46,230,214,.45);
+    opacity: 0; transform: translateY(14px); animation: cardIn .7s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(.15s + var(--i) * .07s); }
+  @keyframes cardIn { to { opacity: 1; transform: none; } }
+  .svc:hover { border-color: var(--accent); }
+  .svc .ico { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid var(--accent); color: var(--accent); box-shadow: 0 0 16px -4px rgba(46,230,214,.6); }
+  .svc .ico svg { width: 28px; height: 28px; }
+  .svc h2 { margin: 0; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: 20px; line-height: 1.1; color: #fff; }
+  .svc .meta { margin: 4px 0 10px; font-size: 14px; color: var(--accent); }
+  .svc .meta s { color: var(--muted); margin-right: 4px; }
+  .svc .go { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1.5px solid var(--accent); border-radius: 8px; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: 14px; color: var(--accent); transition: background .2s, color .2s; }
+  .svc:hover .go, .svc:focus-visible .go { background: var(--accent); color: var(--accent-ink); }
+  .svc .go svg { width: 16px; height: 16px; }
+  .svc .tag { position: absolute; bottom: 12px; right: 12px; font: 700 10px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; padding: 5px 9px; border-radius: 99px; background: var(--offer); color: #241600; }
+  .svc .tag.pop { background: var(--accent); color: var(--accent-ink); }
 
-  /* Trust strip */
-  .trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
-  .trust div { background: var(--bg); padding: 32px 24px; }
-  .trust b { display: block; font-family: var(--display); font-size: 30px; line-height: 1.1; margin-bottom: 6px; }
-  .trust span { color: var(--muted); font-size: 14px; }
-  @media (max-width: 800px) { .trust { grid-template-columns: 1fr 1fr; } }
+  .contact { background: linear-gradient(90deg, rgba(10,12,14,.96) 50%, rgba(10,12,14,.6)), url('/img/setmore-1.webp') right 40% / 60% auto no-repeat, #0b0d0f; }
+  .contact .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .contact .links a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: rgba(16,18,21,.8); font-size: 13px; text-decoration: none; }
+  .contact .links a svg { width: 15px; height: 15px; color: var(--accent); }
+  .contact .addr { font-size: 13px; color: var(--muted); margin: 4px 0 0; }
 
-  /* Gallery marquee */
-  .marquee { display: grid; gap: 14px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-  .row { display: flex; gap: 14px; width: max-content; animation: slide 60s linear infinite; }
-  .row.rev { animation-direction: reverse; animation-duration: 70s; }
-  .marquee:hover .row { animation-play-state: paused; }
-  @keyframes slide { to { transform: translateX(-50%); } }
-  .shot { position: relative; height: clamp(220px, 30vw, 340px); aspect-ratio: 3/4; border-radius: 16px; overflow: hidden; flex: none; background: var(--surface); }
-  .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
-  .shot:hover img { transform: scale(1.06); }
-  .shot figcaption { position: absolute; inset: auto 0 0; padding: 30px 14px 12px; font-size: 13px; background: linear-gradient(transparent, rgba(0,0,0,.8)); }
+  .badges { display: grid; grid-template-columns: repeat(4, 1fr); margin: 4px 0 18px; border: 1px solid var(--line); border-radius: 16px; background: rgba(10,12,14,.85); }
+  .badges div { display: grid; justify-items: center; gap: 6px; padding: 14px 6px; text-align: center; font: 600 11px/1.25 var(--display); text-transform: uppercase; letter-spacing: .02em; }
+  .badges div + div { border-left: 1px solid var(--line); }
+  .badges svg { width: 26px; height: 26px; color: var(--accent); }
+  .badges span { color: var(--accent); display: block; }
 
-  /* Steps */
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: s; }
-  .steps .card { padding: 28px; }
-  .steps .card::before { counter-increment: s; content: "0" counter(s); font-family: var(--display); font-weight: 600; font-size: 52px; color: transparent; -webkit-text-stroke: 1px var(--accent); display: block; line-height: 1; margin-bottom: 16px; }
-  .steps h3 { margin: 0 0 6px; font-size: 20px; }
-  .steps p { margin: 0; color: var(--muted); }
-  @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
-
-  /* Testimonials */
-  .quotes { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-  .quote { padding: 26px; display: grid; gap: 14px; align-content: start; }
-  .quote .stars { color: var(--offer); letter-spacing: 3px; }
-  .quote p { margin: 0; font-size: 17px; }
-  .quote .who { display: flex; align-items: center; gap: 12px; font-size: 14px; }
-  .quote .who img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
-  .quote .who span { color: var(--muted); display: block; }
-
-  /* Visit */
-  .visit { display: grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
-  .visit .card { padding: 30px; }
-  .visit h3 { margin: 0 0 16px; font-family: var(--display); font-size: 26px; }
-  .hours { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .hours td { padding: 9px 0; border-bottom: 1px solid var(--line); }
-  .hours td:last-child { text-align: right; }
-  .hours tr.today td { color: var(--accent); font-weight: 600; }
-  .contact a { display: flex; align-items: center; gap: 12px; padding: 12px 0; text-decoration: none; border-bottom: 1px solid var(--line); }
-  .contact a span[data-icon] svg { width: 20px; height: 20px; color: var(--accent); }
-  .shop { margin: 0 0 18px; font-size: 14px; color: var(--muted); }
-  .shop a { color: var(--accent); }
-  .contact .map { margin-top: 18px; height: 220px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
-  .contact .map iframe { width: 100%; height: 100%; border: 0; filter: invert(.92) hue-rotate(180deg) saturate(.6); }
-  .areas { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
-  .areas span { padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; }
-  @media (max-width: 860px) { .visit { grid-template-columns: 1fr; } }
-
-  .cta-band .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 40px; padding: clamp(28px, 4vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: radial-gradient(120% 160% at 100% 0%, rgba(46,230,214,.12), transparent 55%), var(--surface); }
-  .cta-band h2 { font-size: clamp(30px, 3.8vw, 50px); margin: 0; }
-  .cta-band .ctas { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
-  .gbar { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }
-  .quotes:not(:empty) { margin-top: 28px; }
-  .gbar h2 { font-size: clamp(32px, 4.6vw, 58px); margin: 0; flex: 1 1 360px; }
-  .gscore { display: grid; gap: 2px; font-size: 14px; color: var(--muted); }
-  .gscore .stars { color: var(--offer); font-size: 22px; letter-spacing: 3px; }
-  .faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 24px 56px; align-items: start; }
-  .faq h2 { font-size: clamp(32px, 4.6vw, 58px); margin: 0 0 12px; }
-  .faq .muted a { color: var(--accent); }
-  .qa { border-bottom: 1px solid var(--line); }
-  .qa summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; font-weight: 600; font-size: 17px; }
-  .qa summary::-webkit-details-marker { display: none; }
-  .qa summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; transition: transform .25s; }
-  .qa[open] summary::after { transform: rotate(45deg); }
-  .qa p { margin: 0 0 18px; color: #c9ced3; max-width: 60ch; }
-  @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } }
+  .map { border-radius: 18px; overflow: hidden; border: 1px solid var(--line); height: 240px; margin-bottom: 14px; background: var(--surface); }
+  .map iframe { width: 100%; height: 100%; border: 0; filter: invert(.92) hue-rotate(180deg) saturate(.6); }
+  .foot { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: center; padding: 6px 0 calc(90px + env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
+  .foot a { color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { .svc { opacity: 1; transform: none; animation: none; } }
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you come to me?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We work at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte. You can also bring your car to our shop at 3937 Pembroke Rd, Hollywood, FL."}}, {"@type": "Question", "name": "What do I need to have ready?", "acceptedAnswer": {"@type": "Answer", "text": "Access to the vehicle and permission to work at the location. Please remove valuables. Someone should hand us the car at the start and check it with us at the end."}}, {"@type": "Question", "name": "How long does a detail take?", "acceptedAnswer": {"@type": "Answer", "text": "From about 45 minutes for an Exterior Wash to around 4 hours for a Premium Detail. Larger or very dirty vehicles can take longer."}}, {"@type": "Question", "name": "Why do prices say \"from\"?", "acceptedAnswer": {"@type": "Answer", "text": "Prices are for standard sedans and coupes in average condition. SUVs, trucks, pet hair, heavy stains or excessive dirt can change the price, and we always confirm it with you before we start."}}, {"@type": "Question", "name": "How do I pay?", "acceptedAnswer": {"@type": "Answer", "text": "After the service, once you have inspected the car. We accept debit and credit cards."}}, {"@type": "Question", "name": "Can you remove pet hair and stains?", "acceptedAnswer": {"@type": "Answer", "text": "Interior and Premium Details include light stain treatment. Heavy stains, deep extraction and excessive pet hair are quoted separately so you know the price upfront."}}, {"@type": "Question", "name": "Do you offer ceramic coating and paint correction?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We also do buffing, polishing and headlight restoration. These are quoted per vehicle: send us photos on WhatsApp."}}, {"@type": "Question", "name": "Do you detail boats and aircraft?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Besides cars, SUVs and trucks, we work at marinas and hangars. Message us for a quote."}}, {"@type": "Question", "name": "What products do you use?", "acceptedAnswer": {"@type": "Answer", "text": "Professional-grade products. We are Meguiar's certified and have been detailing since 2018."}}, {"@type": "Question", "name": "What if it rains or I need to reschedule?", "acceptedAnswer": {"@type": "Answer", "text": "Message us on WhatsApp as early as possible. If the weather makes exterior work unsafe, we will contact you to move the appointment."}}, {"@type": "Question", "name": "What if I'm not happy with the result?", "acceptedAnswer": {"@type": "Answer", "text": "Tell us before we leave or within 24 hours with photos. We will review it with you and make it right where reasonable."}}]}</script>
 </head>
 <body>
-<header class="nav">
-  <div class="wrap">
-    <a class="logo" href="/" aria-label="MV Car Detail home"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="46" height="46"></a>
-    <nav><a href="#work">Our work</a><a href="#pricing">Pricing</a><a href="#reviews">Reviews</a><a href="#faq">FAQ</a><a href="#visit">Hours</a></nav>
+<div class="bg" aria-hidden="true">
+  <video id="bgv" muted loop playsinline preload="metadata" poster="/video/hero-poster.jpg"><source src="/video/hero.mp4" type="video/mp4"></video>
+</div>
+
+<main class="wrap">
+  <header class="top">
+    <a class="logo" href="/" aria-label="MV Car Detail"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="52" height="52"></a>
     <a class="btn primary small" href="/booking">Book now</a>
-  </div>
-</header>
+  </header>
 
-<main>
-  <section class="hero" style="padding:0">
-    <div class="hero-bg"><img id="hero-img" src="/img/setmore-1.webp" alt="MV Car Detail van next to a freshly detailed aircraft" fetchpriority="high"></div>
-    <div class="wrap">
-      <span class="eyebrow">Mobile detailing since 2018</span>
-      <h1 class="display">Showroom shine, <em>delivered.</em></h1>
-      <p class="lead">We come to your home, office, marina or hangar in Miami, Broward and Charlotte.</p>
-      <div class="ctas">
-        <a class="btn primary" href="/booking">Book from <span id="from-price">$35</span></a>
-        <a class="btn wa" id="hero-wa" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
-      </div>
-    </div>
+  <section class="intro" style="padding-inline:0">
+    <h1 class="display">More than a wash.<br><em>Real detailing.</em></h1>
+    <div class="bar"></div>
+    <p>Mobile detailing & shop in <b>Hollywood, FL</b>.<br>Miami-Dade · Broward · Charlotte</p>
+    <a class="rating" id="rating" href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener"><span class="stars">★★★★★</span><b id="r-val">4.9</b><span class="muted" id="r-count">46 Google reviews</span></a>
   </section>
 
-  <div class="trust">
-    <div><b>Since 2018</b><span>Cars, boats & aircraft</span></div>
-    <div><b>We come to you</b><span>Water & power included</span></div>
-    <div><b>Meguiar's</b><span>Certified products</span></div>
-    <div><b>Card on site</b><span>Debit & credit</span></div>
+  <section class="cards" id="cards" style="padding:0 0 14px" aria-label="Services"></section>
+
+  <div class="badges">
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg>Mobile<span>& shop</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M12 15l3.4 5.89l1.6 -3.23l3.6 .23l-3.4 -5.89M6.8 12l-3.4 5.89l3.6 -.23l1.6 3.23l3.4 -5.89"/></svg>Meguiar's<span>certified</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.85a12 12 0 0 1 -7.96 -14.85a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06M15 19l2 2l4 -4"/></svg>Price<span>upfront</span></div>
+    <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z"/></svg>Since<span>2018</span></div>
   </div>
 
-  <section id="work">
-    <div class="wrap head reveal"><h2 class="display">Driveways, hangars, marinas.</h2></div>
-    <div class="marquee" id="gallery"></div>
-  </section>
+  <div class="map"><iframe title="MV Car Detail on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=MV+CAR+DETAIL,+3937+Pembroke+Rd,+Hollywood,+FL+33021&output=embed"></iframe></div>
 
-  <section id="pricing" style="padding-top:0">
-    <div class="wrap">
-      <div class="head reveal"><h2 class="display">Pick your level of clean.</h2></div>
-      <div id="offer"></div>
-      <div class="tiers" id="tiers"></div>
-      <details class="fine">
-        <summary>Pricing notes</summary>
-        <p>Prices are for standard sedans and coupes in average condition. Size, pet hair, stains or heavy dirt can change the price, always confirmed with you before we start. Ceramic coating, paint correction, buffing and headlight restoration are quoted separately: <a href="#" class="wa-link">ask on WhatsApp</a>.</p>
-      </details>
-    </div>
-  </section>
-
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="steps">
-        <div class="card reveal"><h3>Book online</h3><p>Live time slots.</p></div>
-        <div class="card reveal"><h3>We pull up</h3><p>Fully equipped.</p></div>
-        <div class="card reveal"><h3>Inspect, then pay</h3><p>Card on site.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="reviews" style="padding-top:0">
-    <div class="wrap">
-      <div class="gbar reveal">
-        <h2 class="display">Rated <span class="accent">4.9</span> on Google.</h2>
-        <div class="gscore">
-          <div class="stars" aria-hidden="true">★★★★★</div>
-          <span id="g-count">46 reviews</span>
-        </div>
-        <a class="btn" id="g-link" href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener">Read them on Google</a>
-      </div>
-      <div class="quotes" id="quotes"></div>
-    </div>
-  </section>
-
-  <section id="faq" style="padding-top:0">
-    <div class="wrap faq">
-      <div class="reveal"><h2 class="display">Questions, answered.</h2>
-        <p class="muted">Something else? <a href="#" class="wa-link" target="_blank" rel="noopener">Ask us on WhatsApp</a>.</p></div>
-      <div class="qas reveal">
-        <details class="qa"><summary>Do you come to me?</summary><p>Yes. We work at your home, office, marina or hangar in Miami-Dade, Broward and Charlotte. You can also bring your car to our shop at 3937 Pembroke Rd, Hollywood, FL.</p></details>
-        <details class="qa"><summary>What do I need to have ready?</summary><p>Access to the vehicle and permission to work at the location. Please remove valuables. Someone should hand us the car at the start and check it with us at the end.</p></details>
-        <details class="qa"><summary>How long does a detail take?</summary><p>From about 45 minutes for an Exterior Wash to around 4 hours for a Premium Detail. Larger or very dirty vehicles can take longer.</p></details>
-        <details class="qa"><summary>Why do prices say &quot;from&quot;?</summary><p>Prices are for standard sedans and coupes in average condition. SUVs, trucks, pet hair, heavy stains or excessive dirt can change the price, and we always confirm it with you before we start.</p></details>
-        <details class="qa"><summary>How do I pay?</summary><p>After the service, once you have inspected the car. We accept debit and credit cards.</p></details>
-        <details class="qa"><summary>Can you remove pet hair and stains?</summary><p>Interior and Premium Details include light stain treatment. Heavy stains, deep extraction and excessive pet hair are quoted separately so you know the price upfront.</p></details>
-        <details class="qa"><summary>Do you offer ceramic coating and paint correction?</summary><p>Yes. We also do buffing, polishing and headlight restoration. These are quoted per vehicle: send us photos on WhatsApp.</p></details>
-        <details class="qa"><summary>Do you detail boats and aircraft?</summary><p>Yes. Besides cars, SUVs and trucks, we work at marinas and hangars. Message us for a quote.</p></details>
-        <details class="qa"><summary>What products do you use?</summary><p>Professional-grade products. We are Meguiar&#x27;s certified and have been detailing since 2018.</p></details>
-        <details class="qa"><summary>What if it rains or I need to reschedule?</summary><p>Message us on WhatsApp as early as possible. If the weather makes exterior work unsafe, we will contact you to move the appointment.</p></details>
-        <details class="qa"><summary>What if I&#x27;m not happy with the result?</summary><p>Tell us before we leave or within 24 hours with photos. We will review it with you and make it right where reasonable.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <section id="visit" style="padding-top:0">
-    <div class="wrap visit">
-      <div class="card reveal">
-        <h3>Where we work</h3>
-        <div class="areas"><span>Miami-Dade, FL</span><span>Broward, FL</span><span>Charlotte, NC</span></div>
-        <p class="shop">Shop: <a href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener" id="shop-addr">3937 Pembroke Rd, Hollywood, FL 33021</a></p>
-        <table class="hours" id="hours"></table>
-        <p class="muted" style="font-size:13px;margin:12px 0 0">Eastern Time</p>
-      </div>
-      <div class="card reveal contact">
-        <h3>Talk to us</h3>
-        <a href="#" class="wa-link" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp (fastest reply)</a>
-        <a href="tel:+19542687993"><span data-icon="phone"></span>+1 954 268 7993</a>
-        <a href="mailto:mvcardetail01@gmail.com"><span data-icon="mail"></span>mvcardetail01@gmail.com</a>
-        <a href="https://link.me/mvcardetail" target="_blank" rel="noopener"><span data-icon="link"></span>link.me/mvcardetail</a>
-        <div class="map"><iframe title="MV Car Detail on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=MV+CAR+DETAIL,+3937+Pembroke+Rd,+Hollywood,+FL+33021&output=embed"></iframe></div>
-        <div class="socials" style="margin-top:20px">
-          <a href="https://www.instagram.com/mvcardetail" target="_blank" rel="noopener" aria-label="Instagram"><span data-icon="ig"></span></a>
-          <a href="https://www.facebook.com/MVcardetail/" target="_blank" rel="noopener" aria-label="Facebook"><span data-icon="fb"></span></a>
-          <a href="https://www.tiktok.com/@mvcardetail" target="_blank" rel="noopener" aria-label="TikTok"><span data-icon="tt"></span></a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-band" style="padding-top:0">
-    <div class="wrap reveal">
-      <h2 class="display">Your car deserves it.</h2>
-      <div class="ctas"><a class="btn primary" href="/booking">Book now</a><a class="btn wa wa-link" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp us</a></div>
-    </div>
-  </section>
+  <nav class="foot"><a href="/moreinfo">More info</a><a href="/moreinfo#faq">FAQ</a><a href="/terms">Terms</a><a href="https://link.me/mvcardetail" target="_blank" rel="noopener">link.me/mvcardetail</a></nav>
 </main>
-
-<footer class="footer">
-  <div class="wrap">
-    <span>© <span id="year"></span> MV Professional Car Detail & Supplies · Miami, FL – Charlotte, NC · <a href="/terms">Terms & Conditions</a> · <a href="#faq">FAQ</a></span>
-    <div class="socials">
-      <a href="https://www.instagram.com/mvcardetail" target="_blank" rel="noopener" aria-label="Instagram"><span data-icon="ig"></span></a>
-      <a href="https://www.facebook.com/MVcardetail/" target="_blank" rel="noopener" aria-label="Facebook"><span data-icon="fb"></span></a>
-      <a href="https://www.tiktok.com/@mvcardetail" target="_blank" rel="noopener" aria-label="TikTok"><span data-icon="tt"></span></a>
-    </div>
-  </div>
-</footer>
 
 <a class="fab-wa wa-link" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><span data-icon="wa"></span></a>
 
 <script type="module">
-import { loadContent, money, dur, wa, esc, icons, reveal, shineText, offerFor, HOURS } from '/assets/common.js';
+import { loadContent, money, dur, wa, esc, icons, shineText, offerFor } from '/assets/common.js';
 
-const waUrl = wa('Hi MV Car Detail! I would like a quote for my vehicle.');
-document.querySelectorAll('.wa-link, #hero-wa').forEach(a => a.href = waUrl);
-document.getElementById('year').textContent = new Date().getFullYear();
+// Background video: skip for reduced motion / data saver, otherwise play muted inline (iOS + Android)
+const v = document.getElementById('bgv');
+const lite = matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.connection?.saveData;
+if (!lite) { v.preload = 'auto'; v.play().catch(() => {}); }
 
-// Hours table (today highlighted, Eastern)
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const t = m => { const h = Math.floor(m / 60), mm = m % 60; return `${h % 12 || 12}${mm ? ':' + String(mm).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
-const todayIdx = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })).getDay();
-document.getElementById('hours').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(i =>
-  `<tr class="${i === todayIdx ? 'today' : ''}"><td>${days[i]}</td><td>${HOURS[i] ? t(HOURS[i][0]) + ' – ' + t(HOURS[i][1]) : 'Closed'}</td></tr>`).join('');
-
+document.querySelectorAll('.wa-link').forEach(a => a.href = wa('Hi MV Car Detail! I would like to book a detail.'));
 icons();
 shineText();
-reveal();
 
-const { services, offer, google, photos, testimonials } = await loadContent();
+// Icons per service level (Tabler-style outline paths)
+const P = {
+  1: 'M7.5 19.42c2.6 2.1 6.4 2.1 9 0c2.6 -2.1 3.26 -5.7 1.56 -8.54l-4.89 -7.26a1.38 1.38 0 0 0 -2.35 0l-4.89 7.26c-1.7 2.84 -1.04 6.44 1.57 8.54z',
+  2: 'M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6z',
+  3: 'M5 11a2 2 0 0 1 2 2v2h10v-2a2 2 0 1 1 4 0v4a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-4a2 2 0 0 1 2 -2zM5 11v-5a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v5M6 19v2M18 19v2',
+  4: 'M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5',
+  5: 'M6 5h12l3 5l-8.5 9.5a.7 .7 0 0 1 -1 0l-8.5 -9.5l3 -5M10 12l-2 -2.2l.6 -1',
+};
+const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+const arrow = svg('M5 12h14M13 18l6 -6M13 6l6 6');
+const phone = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"/></svg>';
+
+const { services, offer, google } = await loadContent();
+
 if (google) {
-  const r = document.querySelector('#reviews .accent .w') || document.querySelector('#reviews .accent');
-  if (google.rating && r) r.textContent = Number(google.rating).toFixed(1);
-  if (google.count) document.getElementById('g-count').textContent = `${google.count} reviews`;
-  if (google.url) document.getElementById('g-link').href = google.url;
-  if (google.address) document.getElementById('shop-addr').textContent = google.address;
+  if (google.rating) document.getElementById('r-val').textContent = Number(google.rating).toFixed(1);
+  if (google.count) document.getElementById('r-count').textContent = `${google.count} Google reviews`;
+  if (google.url) document.getElementById('rating').href = google.url;
 }
+const mapsUrl = google?.url || 'https://maps.app.goo.gl/iEH7dF7M1SHxewJR6';
+const address = google?.address || '3937 Pembroke Rd, Hollywood, FL 33021';
+const linkme = google?.linkme || 'https://link.me/mvcardetail';
 
-if (services.length) document.getElementById('from-price').textContent = money(Math.min(...services.map(s => s.price)));
-const hero = photos.find(p => p.section === 'hero');
-if (hero) document.getElementById('hero-img').src = hero.url;
-
-// Offer banner
-const offerSvc = offer?.active && services.find(s => s.slug === offer.service);
-if (offerSvc) {
-  document.getElementById('offer').innerHTML = `
-    <div class="offer reveal">
-      <div><span class="eyebrow tag">First visit · code ${esc(offer.code)}</span>
-        <h3>${esc(offer.headline)}</h3></div>
-      <div class="prices"><div class="was">${money(offerSvc.price)}</div><div class="now">${money(offer.price)}</div>
-        <a class="btn" href="/booking?service=${offerSvc.slug}&offer=1">Claim ${esc(offerSvc.name)}</a></div>
-    </div>`;
-}
-
-// Tiers
-const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-document.getElementById('tiers').innerHTML = services.map(s => {
+document.getElementById('cards').innerHTML = services.map((s, i) => {
   const o = offerFor(offer, s.slug);
-  return `<article class="card tier reveal ${s.popular ? 'popular' : ''} ${o ? 'deal' : ''}">
-    ${o ? '<span class="ribbon">Best value</span>' : s.popular ? '<span class="ribbon">Most popular</span>' : ''}
-    <div class="lvl">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= s.level ? 'on' : ''}"></i>`).join('')}</div>
-    <h3>${esc(s.name)}</h3>
-    <div class="price"><small>from</small><b>${money(o ? o.price : s.price)}</b>${o ? `<s>${money(s.price)}</s>` : ''}</div>
-    <div class="time">${dur(s.duration_min)}${o ? ' · first visit' : ''}</div>
-    <details class="inc"><summary>What's included</summary><ul>${s.includes.map(i => `<li>${check}<span>${esc(i)}</span></li>`).join('')}</ul></details>
-    <a class="btn ${s.popular || o ? 'primary' : ''}" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}">Book ${esc(s.name)}</a>
-  </article>`;
-}).join('');
-
-// Gallery marquee (two rows, duplicated for a seamless loop)
-const gal = photos.filter(p => p.section === 'gallery');
-const half = Math.ceil(gal.length / 2);
-const row = (list, rev) => `<div class="row ${rev ? 'rev' : ''}">${[...list, ...list].map(p =>
-  `<figure class="shot" style="margin:0"><img src="${esc(p.url)}" alt="${esc(p.caption)}" loading="lazy">${p.caption ? `<figcaption>${esc(p.caption)}</figcaption>` : ''}</figure>`).join('')}</div>`;
-document.getElementById('gallery').innerHTML = row(gal.slice(0, half)) + row(gal.slice(half), true);
-
-// Testimonials
-if (testimonials.length) {
-  document.getElementById('quotes').innerHTML = testimonials.map(q => `<figure class="card quote reveal" style="margin:0">
-    <div class="stars">${'★'.repeat(q.rating)}${'☆'.repeat(5 - q.rating)}</div>
-    <p>“${esc(q.text)}”</p>
-    <figcaption class="who">${q.photo_url ? `<img src="${esc(q.photo_url)}" alt="" loading="lazy">` : ''}<div><b>${esc(q.name)}</b><span>${esc(q.vehicle)}</span></div></figcaption>
-  </figure>`).join('');
-}
-reveal();
+  return `<a class="svc" href="/booking?service=${s.slug}${o ? '&offer=1' : ''}" style="--i:${i};--img:url('${esc(s.image_url || '')}')">
+    ${o ? '<span class="tag">First visit offer</span>' : s.popular ? '<span class="tag pop">Most popular</span>' : ''}
+    <span class="ico">${svg(P[s.level] || P[4])}</span>
+    <span>
+      <h2>${esc(s.name)}</h2>
+      <p class="meta">${o ? `<s>${money(s.price)}</s>` : 'from '}${money(o ? o.price : s.price)} · ${dur(s.duration_min)}</p>
+      <span class="go">Book now ${arrow}</span>
+    </span>
+  </a>`;
+}).join('') + `
+  <div class="svc contact" style="--i:${services.length}">
+    <span class="ico">${phone}</span>
+    <span>
+      <h2>Contact us</h2>
+      <p class="addr">${esc(address)}</p>
+      <span class="links">
+        <a href="tel:+17865686564">${phone}English · 786 568 6564</a>
+        <a href="tel:+19542687993">${phone}Español · 954 268 7993</a>
+        <a class="wa-link" href="${wa('Hi MV Car Detail! I have a question.')}" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
+        <a href="mailto:mvcardetail01@gmail.com"><span data-icon="mail"></span>Email</a>
+        <a href="${esc(mapsUrl)}" target="_blank" rel="noopener">${svg('M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z')}Directions</a>
+        <a href="${esc(linkme)}" target="_blank" rel="noopener">${svg('M9 15l6 -6M11 6l.46 -.54a5 5 0 0 1 7.07 7.07l-.53 .47M13 18l-.4 .53a5.07 5.07 0 0 1 -7.12 0a4.97 4.97 0 0 1 0 -7.07l.52 -.46')}link.me</a>
+      </span>
+    </span>
+  </div>`;
+icons(document.getElementById('cards'));
 </script>
 </body>
 </html>

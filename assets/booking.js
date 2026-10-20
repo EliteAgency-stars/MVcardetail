@@ -1,4 +1,4 @@
-import { sb, shineText, loadContent, money, dur, wa, esc, icons, offerFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
+import { sb, shineText, loadContent, money, dur, wa, esc, icons, offerFor, SIZES, sizeLabel, priceFor, etDate, etToday, fmtTime, fmtDay, HOURS, BUFFER_MIN, N8N } from '/assets/common.js';
 
 const $ = id => document.getElementById(id);
 const form = $('form');
@@ -9,7 +9,7 @@ document.querySelectorAll('.wa-link').forEach(a => a.href = wa('Hi MV Car Detail
 icons();
 shineText();
 
-const state = { service: null, day: null, start: null, slots: [] };
+const state = { service: null, size: 'sedan', day: null, start: null, slots: [] };
 
 // 3D car loads in parallel; the page still works if WebGL is unavailable.
 let car = null;
@@ -20,30 +20,36 @@ import('/assets/car3d.js').then(m => { car = m.mountCar($('car'), say); if (stat
 
 const { services, offer, photos } = await loadContent();
 
-// ---------- Step 1: packages ----------
-$('pkgs').innerHTML = services.map(s => {
-  const o = offerFor(offer, s.slug);
-  return `<label class="pkg"><input type="radio" name="service" value="${s.slug}">
-    <b>${esc(s.name)}${o ? '<span class="tag deal">Offer</span>' : s.popular ? '<span class="tag">Popular</span>' : ''}</b>
-    <span class="p">${o ? `<s>${money(s.price)}</s>${money(o.price)}` : money(s.price)}</span>
-    <small>${dur(s.duration_min)}</small></label>`;
-}).join('');
+// ---------- Step 1-2: vehicle size + packages (prices follow the size) ----------
+function renderPkgs() {
+  $('pkgs').innerHTML = services.map(s => {
+    const o = offerFor(offer, s.slug), base = priceFor(s, state.size);
+    return `<label class="pkg"><input type="radio" name="service" value="${s.slug}" ${state.service?.slug === s.slug ? 'checked' : ''}>
+      <b>${esc(s.name)}${o ? '<span class="tag deal">Offer</span>' : s.popular ? '<span class="tag">Popular</span>' : ''}</b>
+      <span class="p">${o ? `<s>${money(base)}</s>${money(priceFor(s, state.size, o))}` : money(base)}</span>
+      <small>${dur(s.duration_min)}</small></label>`;
+  }).join('');
+}
+if (SIZES.some(z => z.key === params.get('size'))) state.size = params.get('size');
+form.querySelector(`input[name=size][value="${state.size}"]`).checked = true;
+renderPkgs();
 
 function pickService(slug) {
   const s = services.find(x => x.slug === slug) || services.find(x => x.popular) || services[0];
   if (!s) return;
   state.service = s;
-  form.querySelector(`input[name=service][value="${s.slug}"]`).checked = true;
+  renderPkgs();
   $('lvlname').textContent = s.name;
   [...$('lvlbar').children].forEach((el, i) => el.classList.toggle('on', i < s.level));
   $('pkgdetail').innerHTML = `<details><summary>What's included</summary><ul>${s.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul></details>`;
   const o = offerFor(offer, s.slug);
   $('firstbox').hidden = !o;
-  if (o) $('firsttext').innerHTML = `<b>First visit?</b> Pay ${money(o.price)} instead of ${money(s.price)}`;
+  if (o) $('firsttext').innerHTML = `<b>First visit?</b> Pay ${money(priceFor(s, state.size, o))} instead of ${money(priceFor(s, state.size))}`;
   car?.setLevel(s.level);
   renderDays(); renderTimes(); summary();
 }
 $('pkgs').addEventListener('change', e => pickService(e.target.value));
+$('s0').addEventListener('change', e => { state.size = e.target.value; pickService(state.service?.slug); });
 $('replay').onclick = () => state.service && car?.setLevel(state.service.level);
 if (params.get('offer')) $('first').checked = true;
 $('first').onchange = summary;
@@ -127,27 +133,28 @@ setInterval(loadSlots, 60e3); // also rolls "too soon" slots off as time passes
 function price() {
   const s = state.service; if (!s) return null;
   const o = offerFor(offer, s.slug);
-  return o && $('first').checked ? o.price : s.price;
+  return priceFor(s, state.size, o && $('first').checked ? o : null);
 }
 function summary() {
   const s = state.service;
-  $('sum-pkg').textContent = s ? s.name : '-';
+  $('sum-pkg').textContent = s ? `${s.name} · ${sizeLabel(state.size)}` : '-';
   const when = state.start ? `${fmtDay(state.start)}, ${fmtTime(state.start)}` : 'Pick a time';
   $('sum-when').textContent = when; $('m-when').textContent = state.start ? when : `${s?.name || ''} · pick a time`;
   const p = price();
-  $('sum-total').innerHTML = p == null ? '-' : p < s.price ? `<s class="muted" style="font-size:18px;font-weight:400">${money(s.price)}</s> ${money(p)}` : money(p);
+  const full = s ? priceFor(s, state.size) : null;
+  $('sum-total').innerHTML = p == null ? '-' : p < full ? `<s class="muted" style="font-size:18px;font-weight:400">${money(full)}</s> ${money(p)}` : money(p);
   $('m-total').textContent = p == null ? '-' : money(p);
-  ['s1', 's2', 's3', 's4'].forEach((id, i) => $(id).classList.toggle('done', [!!s, form.address.value.trim().length > 3, !!state.start,
+  $('s0').classList.add('done');
+  ['s1', 's2', 's3', 's4'].forEach((id, i) => $(id).classList.toggle('done', [!!s, atShop() || form.address.value.trim().length > 3, !!state.start,
     form.name.value.trim() && form.phone.value.trim() && /\S+@\S+\.\S+/.test(form.email.value) && form.vehicle.value.trim()][i]));
 }
 form.addEventListener('input', summary);
-// "Our shop": the address is the shop's, no need to type it
+// Where: at our shop (address is the shop's) or we come to you (area + address)
 const SHOP = '3937 Pembroke Rd, Hollywood, FL 33021';
+const atShop = () => form.mode.value === 'shop';
 form.addEventListener('change', e => {
-  if (e.target.name !== 'city') return;
-  const shop = e.target.value.startsWith('Shop');
-  if (shop) form.address.value = SHOP; else if (form.address.value === SHOP) form.address.value = '';
-  form.address.readOnly = shop;
+  if (e.target.name !== 'mode') return;
+  $('mobilebox').hidden = atShop(); $('shopbox').hidden = !atShop();
   summary();
 });
 
@@ -160,6 +167,7 @@ form.addEventListener('submit', async e => {
   e.preventDefault();
   $('err').textContent = '';
   const f = Object.fromEntries(new FormData(form));
+  if (atShop()) { f.city = 'Shop · Hollywood, FL'; f.address = SHOP; }
   const missing = !state.service ? 's1' : f.address.trim().length < 4 ? 's2' : !state.start ? 's3'
     : !(f.name.trim() && f.phone.trim().length >= 7 && /\S+@\S+\.\S+/.test(f.email) && f.vehicle.trim()) ? 's4' : null;
   if (missing) {
@@ -174,12 +182,12 @@ form.addEventListener('submit', async e => {
   ov.style.setProperty('--ox', `${r.left + r.width / 2}px`); ov.style.setProperty('--oy', `${r.top + r.height / 2}px`);
   ov.className = 'ov show';
   document.body.style.overflow = 'hidden';
-  const booked = { service: state.service, start: state.start, price: price() };
+  const booked = { service: state.service, size: state.size, start: state.start, price: price() };
   let i = 0; procText(steps[0]);
   const tick = setInterval(() => procText(steps[Math.min(++i, steps.length - 1)]), 900);
 
   const call = sb.rpc('mvcd_book', {
-    p_service: state.service.slug, p_start: state.start.toISOString(), p_city: f.city, p_address: f.address,
+    p_service: state.service.slug, p_size: state.size, p_start: state.start.toISOString(), p_city: f.city, p_address: f.address,
     p_name: f.name, p_phone: f.phone, p_email: f.email, p_vehicle: f.vehicle, p_notes: f.notes || '', p_first_time: !!f.first,
   });
   const [{ data: id, error }] = await Promise.all([call, sleep(2600)]);
@@ -197,14 +205,14 @@ form.addEventListener('submit', async e => {
 });
 $('errclose').onclick = () => { ov.className = 'ov'; document.body.style.overflow = ''; $('s3').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
 
-function showConfirmed(id, f, { service: s, start, price: paid }) {
+function showConfirmed(id, f, { service: s, size, start, price: paid }) {
   const end = new Date(+start + s.duration_min * 60e3);
   const ref = 'MV-' + id.slice(0, 6).toUpperCase();
   $('ref').textContent = `Reference ${ref} · invite sent to ${f.email}`;
-  $('ticket').innerHTML = `<div><span>Package</span><b>${esc(s.name)}</b></div><div><span>Date</span><b>${fmtDay(start)}</b></div>
+  $('ticket').innerHTML = `<div><span>Package</span><b>${esc(s.name)}</b></div><div><span>Vehicle</span><b>${esc(sizeLabel(size))}</b></div><div><span>Date</span><b>${fmtDay(start)}</b></div>
     <div><span>Time</span><b>${fmtTime(start)} – ${fmtTime(end)} ET</b></div><div><span>Address</span><b>${esc(f.address)}</b></div>
     <div><span>Starting price</span><b>${money(paid)}</b></div>`;
-  $('waconfirm').href = wa(`Hi MV Car Detail! I just booked ${s.name} for ${fmtDay(start)} at ${fmtTime(start)} (ref ${ref}).\nName: ${f.name}\nVehicle: ${f.vehicle}\nAddress: ${f.address}\nCan you confirm? Thanks!`);
+  $('waconfirm').href = wa(`Hi MV Car Detail! I just booked ${s.name} (${sizeLabel(size)}) for ${fmtDay(start)} at ${fmtTime(start)} (ref ${ref}).\nName: ${f.name}\nVehicle: ${f.vehicle}\nAddress: ${f.address}\nCan you confirm? Thanks!`);
 
   const title = `MV Car Detail · ${s.name}`;
   const details = `Ref ${ref}. ${s.name} for your ${f.vehicle}. Questions: WhatsApp +1 954 268 7993`;

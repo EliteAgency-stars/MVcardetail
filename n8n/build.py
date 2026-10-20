@@ -60,13 +60,14 @@ def code(name, pos, js):
 # ---------- 1. New booking: Calendar event + invite to client, admin email ----------
 booking_js = EMAIL_JS + r"""
 const b = $('Booking').first().json;
+const size = { sedan: 'Sedan / Coupe', suv: 'SUV / Crossover', truck: 'Truck / Large SUV / Van' }[b.vehicle_size] || 'Sedan / Coupe';
 const start = DateTime.fromISO(b.start_at).setZone('America/New_York');
 const end = start.plus({ minutes: Math.round((new Date(b.end_at) - new Date(b.start_at)) / 60000) - 30 }); // without travel buffer
 return [{ json: {
   ...b,
   ev_start: start.toISO(), ev_end: end.toISO(),
   ev_title: `MV Car Detail · ${b.service_name} · ${b.name}`,
-  ev_desc: `${b.service_name} — starting at $${b.price}${b.offer_applied ? ' (first-time offer)' : ''}\nVehicle: ${b.vehicle}\nPhone: ${b.phone}\nNotes: ${b.notes || '-'}\n\nQuestions or changes: WhatsApp +1 954 268 7993\n[mvcd:${b.id}]`,
+  ev_desc: `${b.service_name} — starting at $${b.price}${b.offer_applied ? ' (first-time offer)' : ''}\nVehicle: ${b.vehicle} (${size})\nPhone: ${b.phone}\nNotes: ${b.notes || '-'}\n\nQuestions or changes: English (786) 568-6564 · Español / WhatsApp (954) 268-7993\n[mvcd:${b.id}]`,
   subject: `New booking: ${b.service_name} · ${start.toFormat('ccc LLL d, h:mm a')} · ${b.name}`,
   html: emailHtml({
     kicker: 'New booking', title: `${b.name} booked ${b.service_name}`,
@@ -74,7 +75,7 @@ return [{ json: {
     rows: [
       ['Package', b.service_name], ['Starting price', `$${b.price}${b.offer_applied ? ' · first-time offer' : ''}`],
       ['Date', start.toFormat('cccc, LLLL d')], ['Time', `${start.toFormat('h:mm a')} – ${end.toFormat('h:mm a')} ET`],
-      ['Area', b.city], ['Address', b.address], ['Vehicle', b.vehicle], ['Client', b.name], ['Phone', b.phone], ['Email', b.email], ['Notes', b.notes || '—'],
+      ['Where', b.city], ['Address', b.address], ['Vehicle', `${b.vehicle} · ${size}`], ['Client', b.name], ['Phone', b.phone], ['Email', b.email], ['Notes', b.notes || '—'],
     ],
     buttons: [
       ['WhatsApp client', `https://wa.me/${b.phone.replace(/\D/g, '').replace(/^(\d{10})$/, '1$1')}?text=${encodeURIComponent(`Hi ${b.name}! This is MV Car Detail confirming your ${b.service_name} on ${start.toFormat('cccc LLL d')} at ${start.toFormat('h:mm a')}.`)}`],

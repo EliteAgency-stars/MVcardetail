@@ -1,5 +1,6 @@
 {
   "cleanUrls": true,
+  "redirects": [{ "source": "/landing", "destination": "/", "permanent": true }],
   "headers": [
     { "source": "/models/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }] },
     { "source": "/fonts/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },

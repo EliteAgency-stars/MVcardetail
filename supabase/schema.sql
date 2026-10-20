@@ -264,3 +264,12 @@ on conflict (key) do nothing;
 -- Card photo per service (used on /landing), and the shop's Google profile
 alter table public.mvcd_services add column if not exists image_url text not null default '';
 update public.mvcd_settings set value = '{"rating": 4.9, "count": 46, "url": "https://maps.app.goo.gl/iEH7dF7M1SHxewJR6", "address": "3937 Pembroke Rd, Hollywood, FL 33021", "linkme": "https://link.me/mvcardetail"}' where key = 'google';
+
+-- Vehicle sizes (applied as migration mvcd_vehicle_sizes):
+--   mvcd_services.price = Sedan/Coupe, price_suv = SUV/Crossover, price_truck = Truck/Large SUV/Van
+--   mvcd_bookings.vehicle_size in ('sedan','suv','truck')
+--   mvcd_book(p_service, p_size, p_start, p_city, p_address, p_name, p_phone, p_email, p_vehicle, p_notes, p_first_time)
+--   computes the size price server-side; the first-visit offer is a discount (base price - offer price) for every size.
+alter table public.mvcd_services add column if not exists price_suv numeric(8,2);
+alter table public.mvcd_services add column if not exists price_truck numeric(8,2);
+alter table public.mvcd_bookings add column if not exists vehicle_size text not null default 'sedan' check (vehicle_size in ('sedan','suv','truck'));

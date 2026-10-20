@@ -93,4 +93,18 @@ export function reveal() {
   document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
 }
 
+export const SIZES = [
+  { key: 'sedan', label: 'Sedan / Coupe', col: 'price' },
+  { key: 'suv', label: 'SUV / Crossover', col: 'price_suv' },
+  { key: 'truck', label: 'Truck / Large SUV / Van', col: 'price_truck' },
+];
+export const sizeLabel = key => (SIZES.find(z => z.key === key) || SIZES[0]).label;
+// Price for a vehicle size; with the first-visit offer the same discount applies to every size (mirrors mvcd_book)
+export function priceFor(s, size = 'sedan', offer = null) {
+  const base = Number(s[(SIZES.find(z => z.key === size) || SIZES[0]).col] ?? s.price);
+  return offer ? Math.max(0, base - (Number(s.price) - Number(offer.price))) : base;
+}
+export const PHONE_EN = '+1 786 568 6564';
+export const PHONE_ES = '+1 954 268 7993';
+
 export const offerFor =(offer, slug) => offer && offer.active && offer.service === slug ? offer : null;

@@ -50,7 +50,15 @@
   .pkg-detail ul { margin: 6px 0 0; padding-left: 18px; columns: 2; column-gap: 20px; }
   @media (max-width: 520px) { .pkg-detail ul { columns: 1; } }
 
-  .seg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .sizes label { position: relative; display: grid; justify-items: center; gap: 6px; padding: 14px 8px; text-align: center; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 13px; line-height: 1.2; }
+  .sizes input { position: absolute; opacity: 0; pointer-events: none; }
+  .sizes svg { width: 34px; height: 34px; color: var(--muted); }
+  .sizes label:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
+  .sizes label:has(input:checked) svg { color: var(--accent); }
+  .seg small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .shopinfo { margin: 0; font-size: 14px; color: var(--muted); } .shopinfo a { color: var(--accent); }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
   .seg label { padding: 12px; text-align: center; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; font-size: 14px; font-weight: 600; }
   .seg input { position: absolute; opacity: 0; pointer-events: none; }
   .seg label:has(input:checked) { border-color: var(--accent); background: rgba(46,230,214,.07); }
@@ -160,7 +168,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="/" aria-label="MV Car Detail home"><img src="/img/logo.webp" alt="MV Professional Car Detail and Supplies" width="46" height="46"></a>
-    <nav><a href="/#pricing">Pricing</a><a href="#work">Our work</a><a href="/#visit">Hours</a></nav>
+    <nav><a href="/moreinfo#pricing">Pricing</a><a href="#work">Our work</a><a href="/moreinfo#visit">Hours</a></nav>
     <a class="btn wa small wa-link" href="#" target="_blank" rel="noopener"><span data-icon="wa"></span>WhatsApp</a>
   </div>
 </header>
@@ -178,31 +186,46 @@
     </div>
 
     <form class="steps" id="form" novalidate>
+      <div class="card step" id="s0">
+        <h2><i>1</i>Your vehicle</h2>
+        <div class="sizes">
+          <label><input type="radio" name="size" value="sedan" checked><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5"/></svg><b>Sedan / Coupe</b></label>
+          <label><input type="radio" name="size" value="suv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-7l1 -4h11l4 4h1a2 2 0 0 1 2 2v5h-2m-4 0h-6M3 10h18M10 6v4"/></svg><b>SUV / Crossover</b></label>
+          <label><input type="radio" name="size" value="truck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5"/></svg><b>Truck / Large SUV / Van</b></label>
+        </div>
+      </div>
+
       <div class="card step" id="s1">
-        <h2><i>1</i>Package</h2>
+        <h2><i>2</i>Package</h2>
         <div class="pkgs" id="pkgs"></div>
         <div class="pkg-detail" id="pkgdetail"></div>
       </div>
 
       <div class="card step" id="s2">
-        <h2><i>2</i>Where</h2>
-        <div class="seg">
-          <label><input type="radio" name="city" value="Miami-Dade / Broward, FL" checked>Miami · Broward</label>
-          <label><input type="radio" name="city" value="Charlotte, NC">Charlotte, NC</label>
-          <label><input type="radio" name="city" value="Shop · Hollywood, FL">Our shop</label>
+        <h2><i>3</i>Where</h2>
+        <div class="seg two">
+          <label><input type="radio" name="mode" value="shop">At our shop<small>Hollywood, FL</small></label>
+          <label><input type="radio" name="mode" value="mobile" checked>We come to you<small>Home, office, marina</small></label>
         </div>
-        <input type="text" name="address" autocomplete="street-address" required placeholder="Address" aria-label="Service address">
+        <div id="mobilebox">
+          <div class="seg two">
+            <label><input type="radio" name="city" value="Miami-Dade / Broward, FL" checked>Miami · Broward</label>
+            <label><input type="radio" name="city" value="Charlotte, NC">Charlotte, NC</label>
+          </div>
+          <input type="text" name="address" autocomplete="street-address" required placeholder="Address" aria-label="Service address">
+        </div>
+        <p class="shopinfo" id="shopbox" hidden>3937 Pembroke Rd, Hollywood, FL 33021 · <a href="https://maps.app.goo.gl/iEH7dF7M1SHxewJR6" target="_blank" rel="noopener">Directions</a></p>
       </div>
 
       <div class="card step" id="s3">
-        <h2><i>3</i>When <span class="live">Live</span></h2>
+        <h2><i>4</i>When <span class="live">Live</span></h2>
         <div class="days" id="days"></div>
         <div class="times" id="times"></div>
         <p class="empty" id="noslots" hidden>Fully booked. Try another day.</p>
       </div>
 
       <div class="card step" id="s4">
-        <h2><i>4</i>You</h2>
+        <h2><i>5</i>You</h2>
         <div class="grid2">
           <label class="field">Name<input type="text" name="name" autocomplete="name" required></label>
           <label class="field">Phone<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>

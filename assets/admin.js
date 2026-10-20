@@ -1,4 +1,4 @@
-import { sb, money, esc, fmtDay, fmtTime, N8N } from '/assets/common.js';
+import { sb, money, esc, fmtDay, fmtTime, N8N, sizeLabel } from '/assets/common.js';
 
 const $ = id => document.getElementById(id);
 const flash = el => { el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 1800); };
@@ -37,7 +37,7 @@ async function loadBookings() {
   $('bookings').innerHTML = (data || []).map(b => {
     const s = new Date(b.start_at);
     return `<article class="card bk" data-id="${b.id}">
-      <div><b>${esc(b.name)}</b> · ${esc(b.service_name)} · ${money(b.price)}${b.offer_applied ? ' (offer)' : ''}</div>
+      <div><b>${esc(b.name)}</b> · ${esc(b.service_name)} (${esc(sizeLabel(b.vehicle_size))}) · ${money(b.price)}${b.offer_applied ? ' (offer)' : ''}</div>
       <span class="st ${b.status}">${b.status}</span>
       <div class="meta">${fmtDay(s)} · ${fmtTime(s)} ET · ${esc(b.city)}<br>${esc(b.address)}<br>${esc(b.vehicle)} · ${esc(b.phone)} · ${esc(b.email)}${b.notes ? '<br>Notes: ' + esc(b.notes) : ''}</div>
       <div class="acts">
@@ -66,7 +66,9 @@ async function loadServices() {
   $('services').innerHTML = (data || []).map(s => `<form class="card box" data-slug="${s.slug}">
     <div class="grid">
       <label class="field">Name<input type="text" name="name" value="${esc(s.name)}" required></label>
-      <label class="field">Price ($)<input type="number" name="price" min="0" step="1" value="${s.price}" required></label>
+      <label class="field">Sedan / Coupe ($)<input type="number" name="price" min="0" step="1" value="${s.price}" required></label>
+      <label class="field">SUV / Crossover ($)<input type="number" name="price_suv" min="0" step="1" value="${s.price_suv}" required></label>
+      <label class="field">Truck / Large SUV / Van ($)<input type="number" name="price_truck" min="0" step="1" value="${s.price_truck}" required></label>
       <label class="field">Duration (minutes)<input type="number" name="duration_min" min="15" step="5" value="${s.duration_min}" required></label>
     </div>
     <label class="field">Short description<input type="text" name="tagline" value="${esc(s.tagline)}"></label>
@@ -84,7 +86,7 @@ $('services').onsubmit = async e => {
   e.preventDefault();
   const f = e.target, d = Object.fromEntries(new FormData(f));
   const row = {
-    name: d.name.trim(), price: +d.price, duration_min: +d.duration_min, tagline: d.tagline.trim(), note: d.note.trim(), image_url: (d.image_url || '').trim(),
+    name: d.name.trim(), price: +d.price, price_suv: +d.price_suv, price_truck: +d.price_truck, duration_min: +d.duration_min, tagline: d.tagline.trim(), note: d.note.trim(), image_url: (d.image_url || '').trim(),
     includes: d.includes.split('\n').map(x => x.trim()).filter(Boolean), popular: !!d.popular, active: !!d.active,
   };
   const { error } = await sb.from('mvcd_services').update(row).eq('slug', f.dataset.slug);
