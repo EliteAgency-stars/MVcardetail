@@ -9,7 +9,12 @@
 <meta property="og:title" content="MV Car Detail · Book your detail">
 <meta property="og:image" content="/video/hero-poster.jpg">
 <link rel="icon" href="/img/logo.webp" data-logo>
-<link rel="apple-touch-icon" href="/img/logo.webp" data-logo>
+<link rel="manifest" href="/site.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MV Detail">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preload" href="/fonts/general-sans-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/style.css">
@@ -69,6 +74,25 @@
   .foot { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: center; padding: 6px 0 calc(90px + env(safe-area-inset-bottom)); font-size: 13px; color: var(--muted); }
   .foot a { color: var(--muted); }
   @media (prefers-reduced-motion: reduce) { .svc { opacity: 1; transform: none; animation: none; } }
+
+  /* Get our app (installable web app) */
+  .app { display: grid; grid-template-columns: auto 1fr auto; gap: 18px 24px; align-items: center; padding: 20px; margin-bottom: 14px; border-radius: 18px; background: rgba(10,12,14,.9); border: 1px solid var(--line); }
+  .app .phone { width: 92px; height: 150px; border-radius: 20px; border: 2px solid #3a3f45; background: linear-gradient(160deg, #1b2026, #0b0d0f); display: grid; place-items: center; box-shadow: 0 10px 30px -10px rgba(0,0,0,.8); }
+  .app .phone img { width: 52px; height: 52px; border-radius: 13px; object-fit: cover; box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 0 18px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .app h2 { margin: 0 0 4px; font-family: var(--display); font-weight: 600; font-size: 20px; text-transform: var(--display-case, uppercase); }
+  .app p { margin: 0 0 12px; color: var(--muted); font-size: 14px; max-width: 46ch; }
+  .app .qr { width: 118px; padding: 8px; border-radius: 12px; background: #fff; }
+  .app .qr svg { display: block; width: 100%; height: auto; }
+  @media (max-width: 640px) { .app { grid-template-columns: auto 1fr; } .app .phone { width: 64px; height: 104px; border-radius: 16px; } .app .phone img { width: 38px; height: 38px; border-radius: 10px; } }
+  .guide { position: fixed; inset: 0; z-index: 120; display: grid; place-items: end center; background: rgba(0,0,0,.6); padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
+  .guide .sheet { width: min(460px, 100%); max-height: 90svh; overflow: auto; border-radius: 22px; background: #15181b; border: 1px solid var(--line); padding: 22px; animation: sheetIn .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes sheetIn { from { transform: translateY(30px); opacity: 0; } }
+  .guide h3 { margin: 0 0 16px; font-family: var(--display); font-weight: 600; font-size: 20px; text-align: center; }
+  .guide ol { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 12px; }
+  .guide li { display: grid; grid-template-columns: 30px 1fr 44px; gap: 12px; align-items: center; padding: 12px; border-radius: 14px; background: var(--surface-2); font-size: 15px; }
+  .guide li > b { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
+  .guide li svg { width: 30px; height: 30px; color: var(--accent); }
+  .guide .btn { width: 100%; }
 </style>
 </head>
 <body>
@@ -97,6 +121,16 @@
     <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.85a12 12 0 0 1 -7.96 -14.85a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06M15 19l2 2l4 -4"/></svg><b data-edit="badge3" data-label="Badge 3">Price</b><span data-edit="badge3_sub" data-label="Badge 3 (second line)">upfront</span></div>
     <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0M17.66 16.66l-4.25 4.24a2 2 0 0 1 -2.82 0l-4.25 -4.24a8 8 0 1 1 11.32 0z"/></svg><b data-edit="badge4" data-label="Badge 4">Since</b><span data-edit="badge4_sub" data-label="Badge 4 (second line)">2018</span></div>
   </div>
+
+  <section class="app" id="app" data-block="app" data-label="Get our app">
+    <div class="phone" aria-hidden="true"><img data-logo src="/img/logo.webp" alt=""></div>
+    <div>
+      <h2 data-edit="app_title" data-label="App: title">Get our app</h2>
+      <p data-edit="app_sub" data-label="App: text">Book in seconds and reach us on WhatsApp, right from your home screen. No App Store needed.</p>
+      <button class="btn primary small" type="button" id="install" hidden><span data-edit="app_button" data-label="App: button">Install app</span></button>
+    </div>
+    <div class="qr" id="qr" hidden title="Scan with your phone camera"></div>
+  </section>
 
   <div class="map" data-block="map" data-label="Map"><iframe title="MV Car Detail on Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=MV+CAR+DETAIL,+3937+Pembroke+Rd,+Hollywood,+FL+33021&output=embed"></iframe></div>
 
@@ -192,6 +226,49 @@ function render(cfg) {
 }
 render(pages.home);
 onPreview(render);
+
+// ---------- Get our app: install on Android/desktop Chrome, guide on iPhone, QR on computers ----------
+const appBox = document.getElementById('app'), installBtn = document.getElementById('install');
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const touch = matchMedia('(pointer: coarse)').matches;
+const preview = new URLSearchParams(location.search).has('preview');
+let deferred = null;
+if (standalone && !preview) appBox.remove(); // already installed: nothing to offer
+else {
+  if (touch) installBtn.hidden = false; // iPhone / Android: install or show how
+  else {
+    // Computer: QR to open the site on the phone (generated in the browser)
+    import('https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/+esm').then(({ default: qrcode }) => {
+      const q = qrcode(0, 'M'); q.addData(`${location.origin}/?source=qr`); q.make();
+      const box = document.getElementById('qr'); box.innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); box.hidden = false;
+    }).catch(() => {});
+  }
+}
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; installBtn.hidden = false; });
+addEventListener('appinstalled', () => { appBox.hidden = true; });
+const icon = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+const SHARE = icon('M8 9h-1a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2h-1M12 14v-11M9 6l3 -3l3 3');
+const PLUS = icon('M4 4h16v16h-16zM9 12h6M12 9v6');
+const DOTS = icon('M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0');
+const VDOTS = icon('M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0');
+const CHECK = icon('M5 12l5 5l10 -10');
+function guide() {
+  const steps = ios
+    ? [['Tap <b>Share</b> (on new iPhones it is inside <b>⋯</b>)', SHARE], ['Scroll and tap <b>Add to Home Screen</b>', PLUS], ['Tap <b>Add</b>. Done!', CHECK]]
+    : [['Open the browser menu <b>⋮</b>', VDOTS], ['Tap <b>Install app</b> or <b>Add to Home screen</b>', PLUS], ['Tap <b>Install</b>. Done!', CHECK]];
+  const g = document.createElement('div');
+  g.className = 'guide'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true');
+  g.innerHTML = `<div class="sheet"><h3>Get our app in 3 taps</h3><ol>${steps.map(([s, ic], i) => `<li><b>${i + 1}</b><span>${s}</span>${ic}</li>`).join('')}</ol><button class="btn primary" type="button">Got it</button></div>`;
+  g.onclick = e => { if (e.target === g || e.target.closest('button')) g.remove(); };
+  document.body.append(g);
+  g.querySelector('button').focus();
+}
+installBtn.onclick = async () => {
+  if (preview) return;
+  if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; return; }
+  guide();
+};
 </script>
 </body>
 </html>
